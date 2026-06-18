@@ -1,5 +1,5 @@
 const CONFIG = {
-  whatsapp: '5562999999999',
+  whatsapp: '556492902436',
   email: 'contato@metalvida.com.br'
 };
 
