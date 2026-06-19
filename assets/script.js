@@ -1,7 +1,8 @@
 const contacts={
   financeiro:{name:'Diogo Luna - Gerente Financeiro',phone:'556496411969'},
   paulo:{name:'Paulo Vitor - Vendas Metal Vida',phone:'556499834032'},
-  mateus:{name:'Mateus - Comercial / Tec Aço',phone:'556481700228'}
+  mateus:{name:'Mateus - Comercial / Tec Aço',phone:'556481700228'},
+  valdivino:{name:'Valdivino - Gestão Metal Vida',phone:'5564981616434'}
 };
 function wa(phone,msg){return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`}
 function setLinks(){
@@ -76,6 +77,35 @@ const lobaoMessages=document.getElementById('lobaoMessages');
 const lobaoForm=document.getElementById('lobaoForm');
 const lobaoInput=document.getElementById('lobaoInput');
 let lobaoStarted=false;
+let lobaoLeadStep=null;
+let lobaoLead={};
+
+const lobaoLeadFields=[
+  {key:'nome',label:'Nome/empresa',question:'Para montar o pedido, qual é seu nome e o nome da empresa?'},
+  {key:'telefone',label:'Telefone/WhatsApp',question:'Qual telefone ou WhatsApp para o comercial retornar?'},
+  {key:'cidade',label:'Cidade/UF',question:'Qual é a cidade e UF da obra, entrega ou retirada?'},
+  {key:'servico',label:'Serviço/produto',question:'O que você precisa? Exemplo: estrutura, galpão, reservatório, chapas, escada, mezanino ou projeto sob medida.'},
+  {key:'medidas',label:'Medidas/detalhes',question:'Passe as medidas, quantidade, espessura/capacidade e qualquer detalhe importante.'},
+  {key:'prazo',label:'Prazo desejado',question:'Tem prazo desejado ou urgência para atendimento?'}
+];
+const lobaoStorageKeys={
+  chat:'metalvida_lobao_conversa',
+  leads:'metalvida_lobao_orcamentos'
+};
+
+function lobaoReadStorage(key,fallback){
+  try{return JSON.parse(localStorage.getItem(key))||fallback}catch{return fallback}
+}
+
+function lobaoWriteStorage(key,value){
+  try{localStorage.setItem(key,JSON.stringify(value))}catch{}
+}
+
+function lobaoRemember(type,text){
+  const log=lobaoReadStorage(lobaoStorageKeys.chat,[]);
+  log.push({type,text,date:new Date().toISOString()});
+  lobaoWriteStorage(lobaoStorageKeys.chat,log.slice(-80));
+}
 
 function lobaoAdd(text,type='bot'){
   if(!lobaoMessages)return;
@@ -84,18 +114,77 @@ function lobaoAdd(text,type='bot'){
   el.textContent=text;
   lobaoMessages.appendChild(el);
   lobaoMessages.scrollTop=lobaoMessages.scrollHeight;
+  lobaoRemember(type,text);
 }
 
-function lobaoWhatsapp(label,message){
+function lobaoWhatsapp(label,message,phone=contacts.paulo.phone){
   if(!lobaoMessages)return;
   const link=document.createElement('a');
   link.className='lobao-action';
-  link.href=wa(contacts.paulo.phone,message);
+  link.href=wa(phone,message);
   link.target='_blank';
   link.rel='noopener';
   link.textContent=label;
   lobaoMessages.appendChild(link);
   lobaoMessages.scrollTop=lobaoMessages.scrollHeight;
+}
+
+function lobaoStartBudgetFlow(origin='Atendimento pelo site'){
+  lobaoLead={
+    origem:origin,
+    startedAt:new Date().toISOString()
+  };
+  lobaoLeadStep=0;
+  lobaoAdd('Vou montar um pedido de orçamento para enviar ao comercial da Metal Vida. Não é valor final, mas já deixa tudo organizado para responderem mais rápido.');
+  lobaoAdd(lobaoLeadFields[lobaoLeadStep].question);
+}
+
+function lobaoBuildBudgetSummary(){
+  const lines=[
+    'NOVO PEDIDO DE ORÇAMENTO - SITE METAL VIDA',
+    '',
+    `Origem/interesse: ${lobaoLead.origem||'Atendimento pelo site'}`
+  ];
+  lobaoLeadFields.forEach(field=>{
+    lines.push(`${field.label}: ${lobaoLead[field.key]||'-'}`);
+  });
+  lines.push('');
+  lines.push('Conversa registrada no site:');
+  lobaoReadStorage(lobaoStorageKeys.chat,[]).slice(-16).forEach(item=>{
+    lines.push(`${item.type==='user'?'Cliente':'Lobão'}: ${item.text}`);
+  });
+  return lines.join('\n');
+}
+
+function lobaoFinishBudgetFlow(){
+  const summary=lobaoBuildBudgetSummary();
+  const leads=lobaoReadStorage(lobaoStorageKeys.leads,[]);
+  leads.push({date:new Date().toISOString(),lead:lobaoLead,summary});
+  lobaoWriteStorage(lobaoStorageKeys.leads,leads.slice(-30));
+  lobaoLeadStep=null;
+  lobaoAdd('Pronto. Montei o resumo do orçamento e salvei esta conversa neste navegador. Agora envie pelo WhatsApp na ordem: primeiro Paulo, depois Mateus e por último uma cópia para Valdivino.');
+  lobaoWhatsapp('1. Enviar para Paulo - Comercial',summary,contacts.paulo.phone);
+  lobaoWhatsapp('2. Enviar para Mateus - Comercial',summary,contacts.mateus.phone);
+  lobaoWhatsapp('3. Enviar cópia para Valdivino',summary,contacts.valdivino.phone);
+}
+
+function lobaoHandleBudgetAnswer(text){
+  const normalized=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  if(normalized.includes('cancelar')||normalized.includes('parar')){
+    lobaoLeadStep=null;
+    lobaoLead={};
+    lobaoAdd('Tudo bem, cancelei este pedido. Se quiser começar novamente, digite orçamento.');
+    return true;
+  }
+  const field=lobaoLeadFields[lobaoLeadStep];
+  lobaoLead[field.key]=text;
+  lobaoLeadStep+=1;
+  if(lobaoLeadStep<lobaoLeadFields.length){
+    lobaoAdd(lobaoLeadFields[lobaoLeadStep].question);
+  }else{
+    lobaoFinishBudgetFlow();
+  }
+  return true;
 }
 
 function lobaoOpen(){
@@ -104,7 +193,7 @@ function lobaoOpen(){
   lobaoLauncher?.setAttribute('aria-expanded','true');
   if(!lobaoStarted){
     lobaoStarted=true;
-    lobaoAdd('Fala! Eu sou o Lobao da Metal Vida. Posso ajudar com orçamento, compra de chapas, reservatórios, galpões, coberturas e peças sob medida. O que você precisa?');
+    lobaoAdd('Fala! Eu sou o Lobão da Metal Vida. Posso montar um pedido de orçamento, salvar a conversa no navegador e enviar o resumo para o comercial pelo WhatsApp. O que você precisa?');
   }
   setTimeout(()=>lobaoInput?.focus(),120);
 }
@@ -117,19 +206,20 @@ function lobaoHide(){
 
 function lobaoReply(text){
   const t=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  if(lobaoLeadStep!==null){
+    lobaoHandleBudgetAnswer(text);
+    return;
+  }
   if(t.includes('chapa')||t.includes('compr')){
-    lobaoAdd('Perfeito. Para compra de chapas, informe medida, espessura, quantidade e cidade de entrega ou retirada. Posso abrir o WhatsApp com a mensagem pronta.');
-    lobaoWhatsapp('Enviar pedido de chapas','Olá, vim pelo site da Metal Vida. Quero comprar chapas metálicas. Preciso informar medidas, espessura, quantidade e cidade.');
+    lobaoStartBudgetFlow(text);
     return;
   }
   if(t.includes('reservatorio')||t.includes('tanque')){
-    lobaoAdd('Reservatório metálico precisa de capacidade, uso, local de instalação e prazo desejado. Posso encaminhar para orçamento técnico.');
-    lobaoWhatsapp('Pedir orçamento de reservatório','Olá, vim pelo site da Metal Vida. Preciso de orçamento para reservatório metálico.');
+    lobaoStartBudgetFlow(text);
     return;
   }
   if(t.includes('galpao')||t.includes('cobertura')||t.includes('estrutura')){
-    lobaoAdd('Para estrutura, galpão ou cobertura, o ideal é enviar medidas, cidade, finalidade e fotos do local. Assim o comercial já começa certo.');
-    lobaoWhatsapp('Pedir orçamento de estrutura','Olá, vim pelo site da Metal Vida. Quero orçamento para estrutura metálica, galpão ou cobertura.');
+    lobaoStartBudgetFlow(text);
     return;
   }
   if(t.includes('vendedor')||t.includes('atendente')||t.includes('humano')||t.includes('whatsapp')){
@@ -138,8 +228,7 @@ function lobaoReply(text){
     return;
   }
   if(t.includes('orcamento')||t.includes('preco')||t.includes('valor')){
-    lobaoAdd('Para agilizar o orçamento, envie nome, cidade, telefone, tipo de serviço e medidas aproximadas. Se tiver foto ou desenho, mande também no WhatsApp.');
-    lobaoWhatsapp('Abrir orçamento no WhatsApp','Olá, vim pelo site da Metal Vida e quero solicitar um orçamento.');
+    lobaoStartBudgetFlow(text);
     return;
   }
   lobaoAdd('Entendi. A Metal Vida atende estruturas metálicas, reservatórios, galpões, coberturas, chapas, mezaninos, escadas e peças sob medida. Se preferir, posso te encaminhar para o WhatsApp agora.');
