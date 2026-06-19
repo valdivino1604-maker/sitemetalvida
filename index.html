@@ -13,7 +13,15 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://www.metalvida.com.br/assets/logo-metalvida.png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="assets/styles.css?v=20260619-3" />
+  <link rel="stylesheet" href="assets/styles.css?v=20260619-5" />
+  <style>
+    .email-box{display:grid;gap:0;padding:0;overflow:hidden}
+    .email-route{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:22px;border-bottom:1px solid rgba(255,255,255,.14)}
+    .email-route:last-child{border-bottom:0}
+    .email-route strong{display:block;font-size:22px;margin-bottom:6px}
+    .email-route span{color:#c8c8c8}
+    @media(max-width:900px){.email-route{align-items:stretch;flex-direction:column}.email-actions .btn{width:100%}}
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -183,19 +191,41 @@
       <div>
         <p class="eyebrow">Acesso interno</p>
         <h2>Caixa de entrada do e-mail corporativo</h2>
-        <p class="section-intro">Os e-mails do domínio são encaminhados pela Cloudflare para as caixas reais da equipe. Use o botão abaixo para abrir o Gmail e consultar as mensagens recebidas.</p>
+        <p class="section-intro">Atalhos para abrir a caixa real de cada responsável e enviar mensagens para os e-mails oficiais da Metal Vida.</p>
       </div>
       <div class="email-box">
-        <div>
-          <strong>Entrada dos e-mails Metal Vida</strong>
-          <span>contato@metalvida.com.br, financeiro@metalvida.com.br e mateus@metalvida.com.br são encaminhados para os responsáveis configurados.</span>
+        <div class="email-route">
+          <div>
+            <strong>Contato geral</strong>
+            <span>contato@metalvida.com.br recebe em valdivino1604@gmail.com</span>
+          </div>
+          <div class="email-actions">
+            <a class="btn primary" href="https://mail.google.com/mail/u/valdivino1604@gmail.com/#inbox" target="_blank" rel="noopener">Abrir caixa</a>
+            <a class="btn ghost" href="mailto:contato@metalvida.com.br">Enviar e-mail</a>
+          </div>
         </div>
-        <div class="email-actions">
-          <a class="btn primary" href="https://mail.google.com/" target="_blank" rel="noopener">Abrir Gmail</a>
-          <a class="btn ghost" href="https://dash.cloudflare.com/" target="_blank" rel="noopener">Cloudflare</a>
+        <div class="email-route">
+          <div>
+            <strong>Financeiro</strong>
+            <span>financeiro@metalvida.com.br recebe em diogoluna04@gmail.com</span>
+          </div>
+          <div class="email-actions">
+            <a class="btn primary" href="https://mail.google.com/mail/u/diogoluna04@gmail.com/#inbox" target="_blank" rel="noopener">Abrir caixa</a>
+            <a class="btn ghost" href="mailto:financeiro@metalvida.com.br">Enviar e-mail</a>
+          </div>
+        </div>
+        <div class="email-route">
+          <div>
+            <strong>Mateus / Comercial</strong>
+            <span>mateus@metalvida.com.br recebe em vendas@acodlr.com</span>
+          </div>
+          <div class="email-actions">
+            <a class="btn primary" href="https://mail.google.com/mail/u/vendas@acodlr.com/#inbox" target="_blank" rel="noopener">Abrir caixa</a>
+            <a class="btn ghost" href="mailto:mateus@metalvida.com.br">Enviar e-mail</a>
+          </div>
         </div>
       </div>
-      <p class="security-note">Por segurança, este site não guarda senha. A Cloudflare apenas encaminha os e-mails para caixas já existentes.</p>
+      <p class="security-note">Por segurança, este site não guarda senha. O acesso abre direto no provedor de e-mail da pessoa responsável.</p>
     </section>
   </main>
 
@@ -204,7 +234,33 @@
     <p>© <span id="year"></span> Metal Vida Engenharia. Todos os direitos reservados.</p>
   </footer>
 
-  <a class="whatsapp-float" data-whatsapp="paulo" href="#" aria-label="WhatsApp">WhatsApp</a>
-  <script src="assets/script.js?v=20260619-3"></script>
+  <div id="lobao-chat-root" aria-live="polite">
+    <section class="lobao-panel" id="lobaoPanel" aria-label="Chat do Lobao da Metal Vida" aria-hidden="true">
+      <header class="lobao-header">
+        <div class="lobao-avatar" aria-hidden="true">L</div>
+        <div>
+          <strong>Lobao da Metal Vida</strong>
+          <span><i></i> Atendimento online</span>
+        </div>
+        <button class="lobao-close" id="lobaoClose" type="button" aria-label="Fechar chat">x</button>
+      </header>
+      <div class="lobao-messages" id="lobaoMessages"></div>
+      <div class="lobao-quick">
+        <button type="button" data-chat-quick="Quero um orçamento">Orçamento</button>
+        <button type="button" data-chat-quick="Quero comprar chapas metálicas">Comprar chapas</button>
+        <button type="button" data-chat-quick="Preciso de reservatório metálico">Reservatório</button>
+        <button type="button" data-chat-quick="Quero falar com um vendedor">Vendedor</button>
+      </div>
+      <form class="lobao-form" id="lobaoForm">
+        <input id="lobaoInput" type="text" autocomplete="off" placeholder="Digite sua dúvida..." aria-label="Mensagem para o Lobao" />
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+    <button class="lobao-launcher" id="lobaoLauncher" type="button" aria-label="Abrir atendimento do Lobao" aria-expanded="false" aria-controls="lobaoPanel">
+      <span class="lobao-launcher-icon" aria-hidden="true"></span>
+      <span class="lobao-notice">Fale com Lobão</span>
+    </button>
+  </div>
+  <script src="assets/script.js?v=20260619-5"></script>
 </body>
 </html>
