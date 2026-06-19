@@ -215,7 +215,6 @@ a {
 .hero-card,
 .cards article,
 .product-card,
-.portfolio article,
 .contact-card,
 .form {
   background: var(--panel);
@@ -390,14 +389,13 @@ a {
 
 .cards article,
 .product-card,
-.portfolio article,
 .contact-card {
   padding: 22px;
 }
 
 .cards h3,
 .product-card h3,
-.portfolio h3 {
+.portfolio-card h3 {
   margin: 0 0 10px;
   font-size: 22px;
   letter-spacing: 0;
@@ -405,7 +403,7 @@ a {
 
 .cards p,
 .product-card p,
-.portfolio p {
+.portfolio-card p {
   color: #cfcfcf;
   margin: 0;
 }
@@ -428,33 +426,79 @@ a {
   margin-top: auto;
 }
 
-.photo {
-  height: 185px;
+.portfolio-card {
+  position: relative;
+  min-height: 350px;
   border-radius: 8px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: end;
-  padding: 16px;
-  background: #242424;
-  border: 1px solid var(--line);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background-color: #171717;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .28);
+  isolation: isolate;
 }
 
-.photo span {
-  background: #000000;
+.portfolio-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .08) 0%, rgba(0, 0, 0, .35) 48%, rgba(0, 0, 0, .88) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, .26), rgba(0, 0, 0, .05));
+}
+
+.portfolio-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: inherit;
+  transition: transform .35s ease;
+}
+
+.portfolio-card:hover::after {
+  transform: scale(1.04);
+}
+
+.portfolio-copy {
+  padding: 28px;
+  width: 100%;
+}
+
+.portfolio-card h3 {
   color: #ffffff;
-  border-left: 4px solid var(--red);
-  padding: 8px 11px;
-  border-radius: 8px;
-  font-weight: 900;
+  font-size: 25px;
+  line-height: 1.12;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .65);
 }
 
-.p1 { background: linear-gradient(135deg, #303030, #0b0b0b); }
-.p2 { background: linear-gradient(135deg, #454545, #050505); }
-.p3 { background: linear-gradient(135deg, #262626, #0d0d0d); }
-.p4 { background: linear-gradient(135deg, #363636, #090909); }
-.p5 { background: linear-gradient(135deg, #232323, #111111); }
-.p6 { background: linear-gradient(135deg, #3a1010, #070707); }
+.portfolio-card h3::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin: 12px 0 14px;
+  background: var(--red);
+}
+
+.portfolio-card p {
+  color: #f4f4f4;
+  font-size: 17px;
+  line-height: 1.45;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .72);
+}
+
+.p1 { background-image: url("https://source.unsplash.com/900x650/?industrial,steel,structure"); }
+.p2 { background-image: url("https://source.unsplash.com/900x650/?industrial,tank,storage"); }
+.p3 { background-image: url("https://source.unsplash.com/900x650/?warehouse,metal,roof"); }
+.p4 { background-image: url("https://source.unsplash.com/900x650/?steel,platform,stairs"); }
+.p5 { background-image: url("https://source.unsplash.com/900x650/?metal,stairs,railing"); }
+.p6 { background-image: url("https://source.unsplash.com/900x650/?engineering,blueprint,construction"); }
 
 .portfolio-cta {
   text-align: center;
