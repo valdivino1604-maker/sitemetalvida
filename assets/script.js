@@ -34,14 +34,13 @@ function ensureLobaoChat(){
     const style=document.createElement('style');
     style.id='lobao-chat-styles';
     style.textContent=`
-#lobao-chat-root{position:fixed;right:18px;bottom:16px;z-index:60;font-family:Arial,Helvetica,sans-serif}
-.lobao-launcher{position:relative;width:138px;height:188px;display:grid;place-items:end center;border:0;border-radius:0;background:transparent;color:#fff;cursor:pointer;filter:drop-shadow(0 18px 18px rgba(0,0,0,.36));transition:transform .18s ease,filter .18s ease}
-.lobao-launcher:before{content:"";position:absolute;left:22px;right:22px;bottom:4px;height:24px;border-radius:999px;background:rgba(0,0,0,.32);filter:blur(8px);z-index:-1}
-.lobao-launcher:after{content:"";position:absolute;right:10px;bottom:34px;width:38px;height:38px;border-radius:50%;border:3px solid #fff;background:#25d366;box-shadow:0 9px 20px rgba(0,0,0,.3),inset 0 2px 5px rgba(255,255,255,.55)}
-.lobao-launcher:hover,.lobao-launcher:focus-visible{transform:translateY(-5px);filter:drop-shadow(0 24px 20px rgba(0,0,0,.42));outline:3px solid rgba(229,9,20,.24);outline-offset:4px}
-.lobao-launcher-icon{width:138px;height:184px;display:block;border:0;border-radius:0;background:url("assets/lobao-mascot.svg") center bottom/contain no-repeat;box-shadow:none;font-size:0;overflow:visible}
-.lobao-notice{display:none}
-.lobao-panel{position:absolute;right:0;bottom:190px;width:min(390px,calc(100vw - 32px));height:min(620px,calc(100vh - 124px));display:grid;grid-template-rows:auto 1fr auto auto;overflow:hidden;border-radius:8px;background:#fff;color:#111;box-shadow:0 24px 60px rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.2);opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transition:opacity .18s ease,transform .18s ease}
+#lobao-chat-root{position:fixed;right:22px;bottom:22px;z-index:60;font-family:Arial,Helvetica,sans-serif}
+.lobao-launcher{position:relative;min-width:190px;height:58px;display:flex;align-items:center;justify-content:center;gap:11px;border:0;border-radius:999px;background:linear-gradient(135deg,#e50914,#8d0505);color:#fff;cursor:pointer;box-shadow:0 16px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.22);transition:transform .18s ease,box-shadow .18s ease,background .18s ease;padding:0 18px 0 12px}
+.lobao-launcher:hover,.lobao-launcher:focus-visible{transform:translateY(-2px);background:linear-gradient(135deg,#ff2630,#a60606);box-shadow:0 20px 40px rgba(0,0,0,.46);outline:3px solid rgba(229,9,20,.28);outline-offset:4px}
+.lobao-launcher-icon{position:relative;width:42px;height:42px;display:block;flex:0 0 auto;border-radius:50%;border:2px solid #fff;background:#111 url("assets/lobao-avatar.svg") center/cover no-repeat;box-shadow:0 6px 14px rgba(0,0,0,.28);font-size:0;overflow:hidden}
+.lobao-launcher-icon:after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:#25d366}
+.lobao-notice{display:block;white-space:nowrap;color:#fff;font-size:15px;font-weight:1000;line-height:1}
+.lobao-panel{position:absolute;right:0;bottom:70px;width:min(390px,calc(100vw - 32px));height:min(620px,calc(100vh - 124px));display:grid;grid-template-rows:auto 1fr auto auto;overflow:hidden;border-radius:8px;background:#fff;color:#111;box-shadow:0 24px 60px rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.2);opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transition:opacity .18s ease,transform .18s ease}
 .lobao-panel.is-open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
 .lobao-header{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#070707,#2a2d31);color:#fff}
 .lobao-avatar{width:46px;height:46px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;border:2px solid rgba(255,255,255,.82);background:#d20a0a;font-size:24px;font-weight:1000}
@@ -57,14 +56,14 @@ function ensureLobaoChat(){
 .lobao-form{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px;border-top:1px solid #e7e7e7;background:#fff}
 .lobao-form input{min-width:0;border:1px solid #d7d7d7;border-radius:8px;padding:12px;color:#111;font-size:14px}
 .lobao-form button{border:0;border-radius:8px;background:#d20a0a;color:#fff;padding:0 14px;cursor:pointer;font-weight:1000}
-@media(max-width:900px){#lobao-chat-root{right:10px;bottom:10px}.lobao-launcher{width:118px;height:164px}.lobao-launcher-icon{width:118px;height:160px}.lobao-launcher:after{right:8px;bottom:28px;width:34px;height:34px}.lobao-panel{bottom:166px}.lobao-notice{display:none}}`;
+@media(max-width:900px){#lobao-chat-root{right:14px;bottom:14px}.lobao-launcher{min-width:174px;height:54px;padding:0 15px 0 11px}.lobao-launcher-icon{width:38px;height:38px}.lobao-notice{font-size:14px}.lobao-panel{bottom:70px}}`;
     document.head.appendChild(style);
   }
   if(!document.getElementById('lobao-chat-root')){
     const root=document.createElement('div');
     root.id='lobao-chat-root';
     root.setAttribute('aria-live','polite');
-    root.innerHTML=`<section class="lobao-panel" id="lobaoPanel" aria-label="Chat do Lobao da Metal Vida" aria-hidden="true"><header class="lobao-header"><div class="lobao-avatar" aria-hidden="true">L</div><div><strong>Lobao da Metal Vida</strong><span><i></i> Atendimento online</span></div><button class="lobao-close" id="lobaoClose" type="button" aria-label="Fechar chat">x</button></header><div class="lobao-messages" id="lobaoMessages"></div><div class="lobao-quick"><button type="button" data-chat-quick="Quero um orçamento">Orçamento</button><button type="button" data-chat-quick="Quero comprar chapas metálicas">Comprar chapas</button><button type="button" data-chat-quick="Preciso de reservatório metálico">Reservatório</button><button type="button" data-chat-quick="Quero falar com um vendedor">Vendedor</button></div><form class="lobao-form" id="lobaoForm"><input id="lobaoInput" type="text" autocomplete="off" placeholder="Digite sua dúvida..." aria-label="Mensagem para o Lobao" /><button type="submit">Enviar</button></form></section><button class="lobao-launcher" id="lobaoLauncher" type="button" aria-label="Abrir atendimento do Lobao" aria-expanded="false" aria-controls="lobaoPanel"><span class="lobao-notice">Fale com o Lobao</span><span class="lobao-launcher-icon" aria-hidden="true"></span></button>`;
+    root.innerHTML=`<section class="lobao-panel" id="lobaoPanel" aria-label="Chat do Lobao da Metal Vida" aria-hidden="true"><header class="lobao-header"><div class="lobao-avatar" aria-hidden="true">L</div><div><strong>Lobao da Metal Vida</strong><span><i></i> Atendimento online</span></div><button class="lobao-close" id="lobaoClose" type="button" aria-label="Fechar chat">x</button></header><div class="lobao-messages" id="lobaoMessages"></div><div class="lobao-quick"><button type="button" data-chat-quick="Quero um orçamento">Orçamento</button><button type="button" data-chat-quick="Quero comprar chapas metálicas">Comprar chapas</button><button type="button" data-chat-quick="Preciso de reservatório metálico">Reservatório</button><button type="button" data-chat-quick="Quero falar com um vendedor">Vendedor</button></div><form class="lobao-form" id="lobaoForm"><input id="lobaoInput" type="text" autocomplete="off" placeholder="Digite sua dúvida..." aria-label="Mensagem para o Lobao" /><button type="submit">Enviar</button></form></section><button class="lobao-launcher" id="lobaoLauncher" type="button" aria-label="Abrir atendimento do Lobao" aria-expanded="false" aria-controls="lobaoPanel"><span class="lobao-launcher-icon" aria-hidden="true"></span><span class="lobao-notice">Fale com Lobão</span></button>`;
     document.body.appendChild(root);
   }
 }
