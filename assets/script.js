@@ -1,51 +1,29 @@
-const CONFIG = {
-  financeiro: '556496411969',
-  paulo: '556499834032',
-  mateus: '556481700228',
-  email: 'contato@metalvida.com.br'
+const contacts={
+  financeiro:{name:'Diogo Luna - Gerente Financeiro',phone:'556496411969'},
+  paulo:{name:'Paulo Vitor - Vendas Metal Vida',phone:'556499834032'},
+  mateus:{name:'Mateus - Comercial / Tec Aço',phone:'556481700228'}
 };
-
-document.getElementById('year').textContent = new Date().getFullYear();
-
-const menuBtn = document.querySelector('.menu-btn');
-const nav = document.querySelector('.nav');
-menuBtn.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-
-const mensagens = {
-  financeiro: 'Olá, vim pelo site da Metal Vida e gostaria de falar com o financeiro.',
-  paulo: 'Olá, vim pelo site da Metal Vida e gostaria de falar com Paulo Vitor sobre vendas/orçamento.',
-  mateus: 'Olá, vim pelo site da Metal Vida e gostaria de falar com Mateus sobre comercial/Tec Aço.'
-};
-
-document.querySelectorAll('[data-whatsapp]').forEach(link => {
-  const setor = link.dataset.whatsapp || 'financeiro';
-  const numero = CONFIG[setor] || CONFIG.financeiro;
-  const texto = mensagens[setor] || mensagens.financeiro;
-  link.href = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-  link.target = '_blank';
-  link.rel = 'noopener';
-});
-
-const form = document.getElementById('quoteForm');
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  const data = Object.fromEntries(new FormData(form).entries());
-  const message = `Olá, gostaria de solicitar um orçamento para a Metal Vida.
-
-` +
-    `Nome: ${data.nome}
-` +
-    `Empresa: ${data.empresa || '-'}
-` +
-    `Telefone: ${data.telefone}
-` +
-    `Cidade: ${data.cidade || '-'}
-` +
-    `Serviço: ${data.servico}
-` +
-    `Descrição: ${data.descricao || '-'}`;
-  window.open(`https://wa.me/${CONFIG.financeiro}?text=${encodeURIComponent(message)}`, '_blank');
+function wa(phone,msg){return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`}
+function setLinks(){
+  document.querySelectorAll('[data-whatsapp]').forEach(el=>{
+    const key=el.getAttribute('data-whatsapp')||'paulo';
+    const c=contacts[key]||contacts.paulo;
+    el.href=wa(c.phone,'Olá, vim pelo site da Metal Vida e gostaria de atendimento.');
+  });
+  document.querySelectorAll('[data-buy]').forEach(el=>{
+    const item=el.getAttribute('data-buy');
+    el.href=wa(contacts.paulo.phone,`Olá, vim pelo site da Metal Vida. Tenho interesse em: ${item}. Pode me passar valores, disponibilidade e prazo?`);
+  });
+}
+setLinks();
+document.getElementById('year').textContent=new Date().getFullYear();
+const menu=document.querySelector('.menu-btn');
+const nav=document.querySelector('.nav');
+menu?.addEventListener('click',()=>{nav.classList.toggle('open');menu.setAttribute('aria-expanded',nav.classList.contains('open'))});
+nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+document.getElementById('quoteForm')?.addEventListener('submit',e=>{
+ e.preventDefault();
+ const d=Object.fromEntries(new FormData(e.target).entries());
+ const msg=`Olá, vim pelo site da Metal Vida e quero solicitar atendimento.\n\nNome: ${d.nome||''}\nEmpresa: ${d.empresa||''}\nTelefone: ${d.telefone||''}\nCidade/UF: ${d.cidade||''}\nDemanda: ${d.servico||''}\nDescrição: ${d.descricao||''}`;
+ window.open(wa(contacts.paulo.phone,msg),'_blank');
 });
