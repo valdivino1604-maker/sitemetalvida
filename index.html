@@ -22,13 +22,14 @@
       <span class="brand-text"><strong>Metal Vida</strong><small>Engenharia</small></span>
     </a>
     <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
-    <nav class="nav">
+    <nav class="nav" aria-label="Menu principal">
       <a href="#sobre">Sobre</a>
       <a href="#servicos">Serviços</a>
-      <a href="#comprar">Compra online</a>
+      <a class="nav-store" href="#comprar">Loja online</a>
       <a href="#portfolio">Portfólio</a>
       <a href="#orcamento">Orçamento</a>
       <a href="#contato">Contato</a>
+      <a class="nav-mail" href="#email">Webmail</a>
     </nav>
   </header>
 
@@ -37,23 +38,24 @@
       <div class="hero-bg"></div>
       <div class="hero-content">
         <p class="eyebrow">Engenharia • Fabricação • Montagem</p>
-        <h1>Estruturas metálicas, reservatórios e soluções industriais com padrão profissional.</h1>
-        <p class="lead">Atendemos indústria, agronegócio, comércio e construção civil com fabricação sob medida, acabamento técnico e compromisso com prazo.</p>
+        <h1>Estruturas metálicas e soluções industriais com atendimento técnico.</h1>
+        <p class="lead">Projetos, fabricação, reservatórios, galpões, coberturas e peças sob medida com foco em segurança, acabamento e prazo.</p>
         <div class="actions">
           <a class="btn primary" data-whatsapp="paulo" href="#">Solicitar orçamento</a>
-          <a class="btn secondary" href="#comprar">Comprar online</a>
+          <a class="btn secondary" href="#comprar">Ir para loja online</a>
           <a class="btn ghost" href="#portfolio">Ver portfólio</a>
         </div>
       </div>
-      <aside class="hero-card">
+      <aside class="hero-card shop-panel" aria-label="Loja online Metal Vida">
         <img src="assets/logo-metalvida.png" alt="Logo Metal Vida Engenharia" />
-        <span>Aço com propósito</span>
-        <h2>Engenharia com compromisso.</h2>
-        <ul>
-          <li>Galpões, coberturas e estruturas metálicas</li>
-          <li>Reservatórios metálicos e soluções industriais</li>
-          <li>Chapas, serralheria e projetos sob medida</li>
-        </ul>
+        <span>Loja online</span>
+        <h2>Compra e orçamento pelo WhatsApp.</h2>
+        <div class="mini-shop">
+          <a data-buy="Chapas metálicas" href="#"><strong>Chapas metálicas</strong><small>consultar medidas</small></a>
+          <a data-buy="Reservatórios metálicos" href="#"><strong>Reservatórios</strong><small>sob medida</small></a>
+          <a data-buy="Galpões e coberturas" href="#"><strong>Galpões e coberturas</strong><small>proposta técnica</small></a>
+        </div>
+        <a class="btn primary" data-whatsapp="paulo" href="#">Falar com vendedor</a>
       </aside>
     </section>
 
@@ -62,6 +64,38 @@
       <article><strong>02</strong><span>Fabricação sob medida</span></article>
       <article><strong>03</strong><span>Obras e soluções industriais</span></article>
       <article><strong>04</strong><span>Compra rápida pelo WhatsApp</span></article>
+    </section>
+
+    <section id="comprar" class="section shop">
+      <p class="eyebrow">Loja online</p>
+      <h2>Compra rápida e orçamento direto com o comercial</h2>
+      <p class="section-intro">Escolha uma categoria e envie a mensagem pronta pelo WhatsApp. O vendedor confirma medida, disponibilidade, prazo, forma de pagamento, retirada ou entrega.</p>
+      <div class="shop-grid">
+        <article class="product-card">
+          <span class="tag">Material</span>
+          <h3>Chapas metálicas</h3>
+          <p>Consulte chapas, medidas, espessuras e condições comerciais.</p>
+          <a class="btn primary small" data-buy="Chapas metálicas" href="#">Comprar pelo WhatsApp</a>
+        </article>
+        <article class="product-card">
+          <span class="tag">Indústria</span>
+          <h3>Reservatórios metálicos</h3>
+          <p>Orçamento para reservatórios sob medida e soluções industriais.</p>
+          <a class="btn primary small" data-buy="Reservatórios metálicos" href="#">Solicitar proposta</a>
+        </article>
+        <article class="product-card">
+          <span class="tag">Obra</span>
+          <h3>Galpões e coberturas</h3>
+          <p>Projeto, fabricação e montagem de estruturas para sua obra.</p>
+          <a class="btn primary small" data-buy="Galpões e coberturas" href="#">Pedir orçamento</a>
+        </article>
+        <article class="product-card">
+          <span class="tag">Sob medida</span>
+          <h3>Serralheria industrial</h3>
+          <p>Escadas, guarda-corpos, portões, bases, suportes e peças especiais.</p>
+          <a class="btn primary small" data-buy="Serralheria industrial" href="#">Falar com vendedor</a>
+        </article>
+      </div>
     </section>
 
     <section id="sobre" class="section two-col">
@@ -90,38 +124,6 @@
         <article><h3>Mezaninos e plataformas</h3><p>Aproveitamento de espaço com estrutura resistente, funcionalidade e segurança.</p></article>
         <article><h3>Escadas, guarda-corpos e portões</h3><p>Serralheria técnica com acabamento profissional e fabricação personalizada.</p></article>
         <article><h3>Chapas e materiais</h3><p>Venda consultiva de chapas e materiais metálicos para empresas e profissionais.</p></article>
-      </div>
-    </section>
-
-    <section id="comprar" class="section shop">
-      <p class="eyebrow">Compra online</p>
-      <h2>Compre ou solicite orçamento pelo WhatsApp</h2>
-      <p class="section-intro">Escolha uma categoria e fale diretamente com o comercial. O atendimento confirma medida, disponibilidade, prazo, retirada ou entrega.</p>
-      <div class="shop-grid">
-        <article class="product-card">
-          <span class="tag">Material</span>
-          <h3>Chapas metálicas</h3>
-          <p>Consulte chapas, medidas, espessuras e condições comerciais.</p>
-          <a class="btn primary small" data-buy="Chapas metálicas" href="#">Comprar pelo WhatsApp</a>
-        </article>
-        <article class="product-card">
-          <span class="tag">Indústria</span>
-          <h3>Reservatórios metálicos</h3>
-          <p>Orçamento para reservatórios sob medida e soluções industriais.</p>
-          <a class="btn primary small" data-buy="Reservatórios metálicos" href="#">Solicitar proposta</a>
-        </article>
-        <article class="product-card">
-          <span class="tag">Obra</span>
-          <h3>Galpões e coberturas</h3>
-          <p>Projeto, fabricação e montagem de estruturas para sua obra.</p>
-          <a class="btn primary small" data-buy="Galpões e coberturas" href="#">Pedir orçamento</a>
-        </article>
-        <article class="product-card">
-          <span class="tag">Sob medida</span>
-          <h3>Serralheria industrial</h3>
-          <p>Escadas, guarda-corpos, portões, bases, suportes e peças especiais.</p>
-          <a class="btn primary small" data-buy="Serralheria industrial" href="#">Falar com vendedor</a>
-        </article>
       </div>
     </section>
 
@@ -175,6 +177,25 @@
         <a class="contact-card" href="mailto:contato@metalvida.com.br"><strong>E-mail</strong><span>contato@metalvida.com.br</span></a>
         <a class="contact-card" href="https://www.instagram.com/metalvidaengenharia" target="_blank" rel="noopener"><strong>Instagram</strong><span>@metalvidaengenharia</span><small>Obras, bastidores e novidades</small></a>
       </div>
+    </section>
+
+    <section id="email" class="section email-access">
+      <div>
+        <p class="eyebrow">Acesso interno</p>
+        <h2>Caixa de entrada do e-mail corporativo</h2>
+        <p class="section-intro">Use esta entrada para acessar o webmail do e-mail criado no domínio da Metal Vida. O login e a senha devem ser digitados somente na página oficial do provedor de e-mail.</p>
+      </div>
+      <div class="email-box">
+        <div>
+          <strong>Webmail Metal Vida</strong>
+          <span>Abra a caixa de entrada para ler e responder mensagens do domínio.</span>
+        </div>
+        <div class="email-actions">
+          <a class="btn primary" href="https://mail.yahoo.com/" target="_blank" rel="noopener">Entrar no e-mail</a>
+          <a class="btn ghost" href="https://dash.cloudflare.com/" target="_blank" rel="noopener">Cloudflare</a>
+        </div>
+      </div>
+      <p class="security-note">Por segurança, este site não guarda senha e não faz login dentro da página.</p>
     </section>
   </main>
 
