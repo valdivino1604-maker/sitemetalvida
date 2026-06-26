@@ -1,6 +1,5 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Metal Vida Engenharia | Estruturas Metálicas, Reservatórios e Compra Online</title>
@@ -13,13 +12,19 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://www.metalvida.com.br/assets/logo-metalvida.png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="assets/styles.css?v=20260619-6" />
+  <link rel="stylesheet" href="assets/styles.css?v=20260619-7" />
   <style>
     .email-box{display:grid;gap:0;padding:0;overflow:hidden}
     .email-route{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:22px;border-bottom:1px solid rgba(255,255,255,.14)}
     .email-route:last-child{border-bottom:0}
     .email-route strong{display:block;font-size:22px;margin-bottom:6px}
     .email-route span{color:#c8c8c8}
+    .product-search-box{margin:26px 0 22px;padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(255,255,255,.06);box-shadow:0 18px 40px rgba(0,0,0,.16)}
+    .product-search-box label{display:block;font-weight:800;margin-bottom:9px}
+    .product-search-box input{width:100%;border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:15px 16px;font-size:16px;background:#fff;color:#111;outline:none}
+    .product-search-box input:focus{border-color:#f5c542;box-shadow:0 0 0 3px rgba(245,197,66,.25)}
+    .product-search-box small{display:block;margin-top:9px;color:#c8c8c8;line-height:1.4}
+    .product-empty{display:none;margin:0 0 20px;padding:16px;border-radius:16px;background:#fff7d6;color:#573a00;font-weight:800}
     @media(max-width:900px){.email-route{align-items:stretch;flex-direction:column}.email-actions .btn{width:100%}}
   </style>
 </head>
@@ -78,26 +83,32 @@
       <p class="eyebrow">Loja online</p>
       <h2>Compra rápida e orçamento direto com o comercial</h2>
       <p class="section-intro">Escolha uma categoria e envie a mensagem pronta pelo WhatsApp. O vendedor confirma medida, disponibilidade, prazo, forma de pagamento, retirada ou entrega.</p>
+      <div class="product-search-box">
+        <label for="productSearch">Buscar produto ou serviço</label>
+        <input id="productSearch" type="search" placeholder="Digite: chapa, reservatório, galpão, cobertura, mezanino, portão, escada..." />
+        <small>A busca filtra os itens abaixo na hora. Se não aparecer, solicite pelo WhatsApp como orçamento sob medida.</small>
+      </div>
+      <div id="productEmpty" class="product-empty">Não encontramos esse item na lista. Chame no WhatsApp e peça orçamento sob medida.</div>
       <div class="shop-grid">
-        <article class="product-card">
+        <article class="product-card" data-search="chapa chapas metalicas metálicas aço ferro material corte dobra espessura medida compra">
           <span class="tag">Material</span>
           <h3>Chapas metálicas</h3>
           <p>Consulte chapas, medidas, espessuras e condições comerciais.</p>
           <a class="btn primary small" data-buy="Chapas metálicas" href="#">Comprar pelo WhatsApp</a>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-search="reservatorio reservatório reservatorios reservatórios metalicos metálicos tanque caixa armazenamento industrial rural sob medida">
           <span class="tag">Indústria</span>
           <h3>Reservatórios metálicos</h3>
           <p>Orçamento para reservatórios sob medida e soluções industriais.</p>
           <a class="btn primary small" data-buy="Reservatórios metálicos" href="#">Solicitar proposta</a>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-search="galpao galpão galpoes galpões coberturas cobertura estrutura metalica metálica obra barracao barracão telhado montagem">
           <span class="tag">Obra</span>
           <h3>Galpões e coberturas</h3>
           <p>Projeto, fabricação e montagem de estruturas para sua obra.</p>
           <a class="btn primary small" data-buy="Galpões e coberturas" href="#">Pedir orçamento</a>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-search="serralheria industrial escadas guarda corpos guarda-corpos portoes portões portao portão base suporte peca peça especial sob medida">
           <span class="tag">Sob medida</span>
           <h3>Serralheria industrial</h3>
           <p>Escadas, guarda-corpos, portões, bases, suportes e peças especiais.</p>
@@ -165,11 +176,11 @@
         <p>O formulário abre o WhatsApp com a mensagem pronta para o vendedor. Informe medidas, cidade, prazo e detalhes para agilizar o atendimento.</p>
       </div>
       <form id="quoteForm" class="form">
-        <label>Nome<input name="nome" required placeholder="Seu nome" /></label>
+        <label>Nome<input name="nome" required="" placeholder="Seu nome" /></label>
         <label>Empresa<input name="empresa" placeholder="Nome da empresa" /></label>
-        <label>Telefone<input name="telefone" required placeholder="(00) 00000-0000" /></label>
+        <label>Telefone<input name="telefone" required="" placeholder="(00) 00000-0000" /></label>
         <label>Cidade/UF<input name="cidade" placeholder="Cidade/UF" /></label>
-        <label>Tipo de demanda<select name="servico"><option>Compra de chapas</option><option>Galpão metálico</option><option>Reservatório metálico</option><option>Cobertura metálica</option><option>Mezanino</option><option>Escada/guarda-corpo</option><option>Serralheria industrial</option><option>Projeto sob medida</option></select></label>
+        <label>Tipo de demanda<select name="servico"><option selected>Compra de chapas</option><option>Galpão metálico</option><option>Reservatório metálico</option><option>Cobertura metálica</option><option>Mezanino</option><option>Escada/guarda-corpo</option><option>Serralheria industrial</option><option>Projeto sob medida</option></select></label>
         <label>Descrição<textarea name="descricao" rows="5" placeholder="Descreva medidas, quantidade, local, prazo desejado e detalhes"></textarea></label>
         <button class="btn primary" type="submit">Enviar para o comercial</button>
       </form>
@@ -261,6 +272,26 @@
       <span class="lobao-notice">Fale com Lobão</span>
     </button>
   </div>
-  <script src="assets/script.js?v=20260619-6"></script>
-</body>
-</html>
+  <script>
+    (function(){
+      const input=document.getElementById('productSearch');
+      const empty=document.getElementById('productEmpty');
+      const cards=[...document.querySelectorAll('#comprar .product-card')];
+      function norm(v){return (v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+      if(input){
+        input.addEventListener('input',function(){
+          const q=norm(input.value);
+          let visible=0;
+          cards.forEach(function(card){
+            const text=norm(card.innerText+' '+(card.getAttribute('data-search')||''));
+            const show=!q||text.indexOf(q)>-1;
+            card.style.display=show?'':'none';
+            if(show) visible++;
+          });
+          if(empty) empty.style.display=q&&visible===0?'block':'none';
+        });
+      }
+    })();
+  </script>
+  <script src="assets/script.js?v=20260619-7"></script>
+</body></html>
