@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.metalvida.com.br/sitemap.xml
+Sitemap: https://www.metalvida.com.br/sitemap-produtos.xml
