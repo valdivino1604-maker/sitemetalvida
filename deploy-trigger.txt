@@ -2,3 +2,4 @@ Deploy forcado para atualizar Cloudflare Pages.
 Repositorio: sitemetalvida
 Padrao visual: vermelho e preto Metal Vida
 Versao: 2026-06-27
+Deploy novo solicitado apos ajuste de DNS e dominio.
