@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.metalvida.com.br/sitemap.xml
-Sitemap: https://www.metalvida.com.br/sitemap-produtos.xml
+Sitemap: https://metalvida.com.br/sitemap.xml
+Sitemap: https://metalvida.com.br/sitemap-produtos.xml
