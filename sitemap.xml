@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.metalvida.com.br/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.metalvida.com.br/chapas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://www.metalvida.com.br/estruturas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://www.metalvida.com.br/galpoes-metalicos/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.metalvida.com.br/coberturas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.metalvida.com.br/reservatorios-metalicos/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.metalvida.com.br/tanques-metalicos/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.metalvida.com.br/serralheria-industrial/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.metalvida.com.br/mezaninos-metalicos/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://metalvida.com.br/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://metalvida.com.br/chapas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://metalvida.com.br/estruturas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://metalvida.com.br/galpoes-metalicos/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://metalvida.com.br/coberturas-metalicas/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://metalvida.com.br/reservatorios-metalicos/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://metalvida.com.br/tanques-metalicos/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://metalvida.com.br/serralheria-industrial/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://metalvida.com.br/mezaninos-metalicos/</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
 </urlset>
