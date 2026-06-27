@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://metalvida.com.br/sitemap.xml
 Sitemap: https://metalvida.com.br/sitemap-produtos.xml
+# deploy metalvida
