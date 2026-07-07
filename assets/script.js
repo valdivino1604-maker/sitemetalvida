@@ -1,19 +1,24 @@
 const contacts={
-  financeiro:{name:'Diogo Luna - Gerente Financeiro',phone:'556496411969'},
-  paulo:{name:'Paulo Vitor - Vendas Metal Vida',phone:'556499834032'},
-  mateus:{name:'Mateus - Comercial / Tec Aço',phone:'556481700228'},
-  valdivino:{name:'Valdivino - Gestão Metal Vida',phone:'5564981616434'}
+  financeiro:{name:'Valdivino - Metal Vida',phone:'5564981616434'},
+  paulo:{name:'Valdivino - Metal Vida',phone:'5564981616434'},
+  mateus:{name:'Valdivino - Metal Vida',phone:'5564981616434'},
+  valdivino:{name:'Valdivino - Metal Vida',phone:'5564981616434'}
 };
 function wa(phone,msg){return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`}
 function setLinks(){
   document.querySelectorAll('[data-whatsapp]').forEach(el=>{
     const key=el.getAttribute('data-whatsapp')||'paulo';
     const c=contacts[key]||contacts.paulo;
-    el.href=wa(c.phone,'Olá, vim pelo site da Metal Vida e gostaria de atendimento.');
+    const customMessage=el.getAttribute('data-message');
+    el.href=wa(c.phone,customMessage||'Olá, vim pelo site da Metal Vida e gostaria de atendimento.');
   });
   document.querySelectorAll('[data-buy]').forEach(el=>{
     const item=el.getAttribute('data-buy');
-    el.href=wa(contacts.paulo.phone,`Olá, vim pelo site da Metal Vida. Tenho interesse em: ${item}. Pode me passar valores, disponibilidade e prazo?`);
+    el.href=wa(contacts.valdivino.phone,`Olá, vim pelo site da Metal Vida. Tenho interesse em: ${item}. Pode me passar valores, disponibilidade e prazo?`);
+  });
+  document.querySelectorAll('[data-service]').forEach(el=>{
+    const item=el.getAttribute('data-service');
+    el.href=wa(contacts.valdivino.phone,`Olá, vim pelo site da Metal Vida. Quero solicitar orçamento técnico para: ${item}. Pode me orientar?`);
   });
 }
 setLinks();
@@ -25,8 +30,8 @@ nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classLi
 document.getElementById('quoteForm')?.addEventListener('submit',e=>{
  e.preventDefault();
  const d=Object.fromEntries(new FormData(e.target).entries());
- const msg=`Olá, vim pelo site da Metal Vida e quero solicitar atendimento.\n\nNome: ${d.nome||''}\nEmpresa: ${d.empresa||''}\nTelefone: ${d.telefone||''}\nCidade/UF: ${d.cidade||''}\nDemanda: ${d.servico||''}\nDescrição: ${d.descricao||''}`;
- window.open(wa(contacts.paulo.phone,msg),'_blank');
+ const msg=`SOLICITAÇÃO DE ORÇAMENTO - METAL VIDA\n\nNome: ${d.nome||''}\nEmpresa: ${d.empresa||''}\nWhatsApp: ${d.whatsapp||d.telefone||''}\nCidade/UF: ${d.cidade||''}\nTipo de serviço: ${d.servico||''}\nMedidas aproximadas: ${d.medidas||''}\nPrazo desejado: ${d.prazo||''}\nDescrição: ${d.descricao||''}\n\nMensagem enviada pelo site metalvida.com.br`;
+ window.open(wa(contacts.valdivino.phone,msg),'_blank');
 });
 
 function ensureLobaoChat(){
@@ -162,10 +167,8 @@ function lobaoFinishBudgetFlow(){
   leads.push({date:new Date().toISOString(),lead:lobaoLead,summary});
   lobaoWriteStorage(lobaoStorageKeys.leads,leads.slice(-30));
   lobaoLeadStep=null;
-  lobaoAdd('Pronto. Montei o resumo do orçamento e salvei esta conversa neste navegador. Agora envie pelo WhatsApp na ordem: primeiro Paulo, depois Mateus e por último uma cópia para Valdivino.');
-  lobaoWhatsapp('1. Enviar para Paulo - Comercial',summary,contacts.paulo.phone);
-  lobaoWhatsapp('2. Enviar para Mateus - Comercial',summary,contacts.mateus.phone);
-  lobaoWhatsapp('3. Enviar cópia para Valdivino',summary,contacts.valdivino.phone);
+  lobaoAdd('Pronto. Montei o resumo do orçamento e salvei esta conversa neste navegador. Por enquanto, todos os pedidos serão enviados diretamente para o Valdivino.');
+  lobaoWhatsapp('Enviar orçamento para Valdivino',summary,contacts.valdivino.phone);
 }
 
 function lobaoHandleBudgetAnswer(text){
