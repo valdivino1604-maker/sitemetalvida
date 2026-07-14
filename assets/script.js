@@ -201,8 +201,10 @@ const leadFields = [
   { key: "telefone", label: "Telefone/WhatsApp", question: "Qual telefone ou WhatsApp para o comercial retornar?" },
   { key: "cidade", label: "Cidade/UF", question: "Qual e a cidade e UF do local de instalacao?" },
   { key: "servico", label: "Produto/modelo", question: "Qual produto voce precisa: tipo taca, tubular sem cone, tanque horizontal para combustivel ou ainda precisa de orientacao?" },
-  { key: "medidas", label: "Capacidade/detalhes", question: "Qual capacidade desejada, fluido armazenado e medidas aproximadas? Exemplo: 30.000 L de agua, 50.000 L de diesel, altura desejada." },
-  { key: "prazo", label: "Prazo desejado", question: "Tem prazo desejado ou urgencia para atendimento?" }
+  { key: "medidas", label: "Capacidade/medidas", question: "Qual capacidade desejada e medidas aproximadas? Exemplo: 15 m3, 30.000 L, altura desejada ou espaco disponivel." },
+  { key: "fluido", label: "Fluido/aplicacao", question: "Vai armazenar o que: agua, diesel, outro combustivel, graos, efluente ou outro material?" },
+  { key: "prazo", label: "Prazo desejado", question: "Tem prazo desejado ou urgencia para atendimento?" },
+  { key: "detalhes", label: "Detalhes adicionais", question: "Tem algum detalhe importante: local de montagem, base pronta, escada, plataforma, pintura, acesso para caminhao ou guindaste?" }
 ];
 
 const storageKeys = {
@@ -252,11 +254,60 @@ function addWhatsappAction(label, message, phone = contacts.valdivino.phone) {
   lobaoMessages.scrollTop = lobaoMessages.scrollHeight;
 }
 
+function normalizeText(text) {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function detectBudgetIntent(text) {
+  const t = normalizeText(text);
+  return (
+    t.includes("orcamento") ||
+    t.includes("preco") ||
+    t.includes("valor") ||
+    t.includes("reservatorio") ||
+    t.includes("tanque") ||
+    t.includes("taca") ||
+    t.includes("tubular") ||
+    t.includes("combustivel") ||
+    t.includes("diesel") ||
+    t.includes("agua") ||
+    t.includes("alcool") ||
+    t.includes("gasolina") ||
+    /\b\d+([,.]\d+)?\s*(m3|m³|mil litros|litros|l|lts?)\b/i.test(text)
+  );
+}
+
+function prefillLeadFromText(text) {
+  const t = normalizeText(text);
+  const capacity = text.match(/\b\d+([,.]\d+)?\s*(m3|m³|mil litros|litros|l|lts?)\b/i);
+
+  if (capacity) lead.medidas = capacity[0];
+  if (t.includes("taca")) lead.servico = "Reservatorio tipo taca";
+  if (t.includes("tubular")) lead.servico = "Reservatorio tubular sem cone";
+  if (t.includes("combustivel") || t.includes("diesel") || t.includes("gasolina") || t.includes("alcool")) {
+    lead.fluido = "Combustivel";
+    if (!lead.servico) lead.servico = "Tanque horizontal para combustivel";
+  }
+  if (t.includes("agua")) lead.fluido = "Agua";
+}
+
+function askNextLeadQuestion() {
+  while (leadStep < leadFields.length && lead[leadFields[leadStep].key]) {
+    leadStep += 1;
+  }
+  if (leadStep < leadFields.length) {
+    addMessage(leadFields[leadStep].question);
+  } else {
+    finishBudgetFlow();
+  }
+}
+
 function buildLeadSummary() {
   const lines = [
     "NOVO PEDIDO DE ORCAMENTO - SITE METAL VIDA",
     "",
-    `Origem/interesse: ${lead.origem || "Atendimento pelo site"}`
+    `Origem/interesse: ${lead.origem || "Atendimento pelo site"}`,
+    `Primeira mensagem: ${lead.mensagemInicial || "-"}`
   ];
   leadFields.forEach((field) => {
     lines.push(`${field.label}: ${lead[field.key] || "-"}`);
@@ -284,10 +335,14 @@ function buildTransferSummary() {
 }
 
 function startBudgetFlow(origin = "Atendimento pelo site") {
-  lead = { origem: origin, startedAt: new Date().toISOString() };
+  lead = { origem: origin, mensagemInicial: origin, startedAt: new Date().toISOString() };
+  prefillLeadFromText(origin);
   leadStep = 0;
-  addMessage("Vou montar um pedido de proposta tecnica para reservatorio ou tanque Metal Vida. Nao e valor final, mas ja deixa capacidade, fluido, modelo e local organizados para responderem mais rapido.");
-  addMessage(leadFields[leadStep].question);
+  addMessage("Perfeito. Vou coletar os dados do pedido antes de transferir para o Valdivino. Assim ele recebe tudo organizado no WhatsApp e consegue responder mais rapido.");
+  if (lead.medidas || lead.servico || lead.fluido) {
+    addMessage(`Ja anotei: ${[lead.servico, lead.medidas, lead.fluido].filter(Boolean).join(" | ")}.`);
+  }
+  askNextLeadQuestion();
 }
 
 function finishBudgetFlow() {
@@ -311,11 +366,7 @@ function handleBudgetAnswer(text) {
   const field = leadFields[leadStep];
   lead[field.key] = text;
   leadStep += 1;
-  if (leadStep < leadFields.length) {
-    addMessage(leadFields[leadStep].question);
-  } else {
-    finishBudgetFlow();
-  }
+  askNextLeadQuestion();
   return true;
 }
 
@@ -337,40 +388,35 @@ function hideChat() {
 }
 
 function transferToWhatsapp() {
+  if (leadStep !== null) {
+    addMessage("Antes de transferir, preciso completar o pedido para o Valdivino receber tudo organizado.");
+    askNextLeadQuestion();
+    return;
+  }
+  if (!lead.nome && !lead.telefone && !lead.medidas) {
+    startBudgetFlow("Cliente clicou para falar no WhatsApp pelo Metalzinho");
+    return;
+  }
   const message = leadStep !== null ? buildLeadSummary() : buildTransferSummary();
   addMessage("Perfeito. Vou transferir voce para o WhatsApp do Valdivino para continuar o atendimento.");
   window.open(wa(contacts.valdivino.phone, message), "_blank");
 }
 
 function reply(text) {
-  const t = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const t = normalizeText(text);
   if (leadStep !== null) {
     handleBudgetAnswer(text);
     return;
   }
-  if (t.includes("taca") || t.includes("taça") || t.includes("tubular") || t.includes("combustivel") || t.includes("combustível")) {
-    startBudgetFlow(text);
-    return;
-  }
-  if (t.includes("reservatorio") || t.includes("tanque")) {
-    startBudgetFlow(text);
-    return;
-  }
-  if (t.includes("agua") || t.includes("água") || t.includes("diesel") || t.includes("alcool") || t.includes("gasolina")) {
-    startBudgetFlow(text);
-    return;
-  }
   if (t.includes("vendedor") || t.includes("atendente") || t.includes("humano") || t.includes("whatsapp") || t.includes("especialista")) {
-    addMessage("Claro. Vou te mandar direto para o WhatsApp do Valdivino.");
-    addWhatsappAction("Falar no WhatsApp", "Ola, vim pelo site da Metal Vida e quero falar com um especialista.", contacts.valdivino.phone);
-    return;
-  }
-  if (t.includes("orcamento") || t.includes("preco") || t.includes("valor")) {
     startBudgetFlow(text);
     return;
   }
-  addMessage("Entendi. A Metal Vida atende reservatorio tipo taca, reservatorio tubular sem cone e tanque horizontal para combustivel sob projeto. Se preferir, posso te encaminhar para o WhatsApp agora.");
-  addWhatsappAction("Continuar no WhatsApp", "Ola, vim pelo site da Metal Vida e preciso de atendimento para reservatorio ou tanque metalico.", contacts.valdivino.phone);
+  if (detectBudgetIntent(text)) {
+    startBudgetFlow(text);
+    return;
+  }
+  addMessage("Entendi. Para eu te ajudar de verdade, vou montar um pedido antes de transferir. Me diga se voce precisa de reservatorio tipo taca, tubular, tanque para combustivel ou outra solucao metalica.");
 }
 
 lobaoLauncher?.addEventListener("click", () => {
