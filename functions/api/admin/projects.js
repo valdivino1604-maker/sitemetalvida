@@ -6,11 +6,11 @@ function makeId() {
 
 function defaultSteps() {
   return [
-    { title: "Atendimento inicial", description: "Dados do cliente e aplicação recebidos.", done: true },
-    { title: "Levantamento técnico", description: "Capacidade, fluido, local e prazo em análise.", done: false },
-    { title: "Proposta técnica", description: "Escopo, condições e próximos passos em validação.", done: false },
-    { title: "Projeto / fabricação", description: "Liberado após aprovação comercial e técnica.", done: false },
-    { title: "Entrega / montagem", description: "Programação definida após fabricação.", done: false }
+    { title: "Atendimento inicial", description: "Dados do cliente e aplicacao recebidos.", done: true },
+    { title: "Levantamento tecnico", description: "Capacidade, fluido, local e prazo em analise.", done: false },
+    { title: "Proposta tecnica", description: "Escopo, condicoes e proximos passos em validacao.", done: false },
+    { title: "Projeto / fabricacao", description: "Liberado apos aprovacao comercial e tecnica.", done: false },
+    { title: "Entrega / montagem", description: "Programacao definida apos fabricacao.", done: false }
   ];
 }
 
@@ -31,23 +31,32 @@ function normalizeSteps(payload) {
 }
 
 function normalizeDocs(payload) {
-  if (Array.isArray(payload.documents) && payload.documents.length) {
-    return payload.documents.map((doc) => ({
-      name: String(doc.name || "").trim(),
-      status: String(doc.status || "Disponível mediante liberação").trim(),
-      url: String(doc.url || "").trim()
-    })).filter((doc) => doc.name);
-  }
   return parseLines(payload.documents_text, (line) => {
-    const [name, status = "Disponível mediante liberação", url = ""] = line.split("|");
-    return { name: name.trim(), status: status.trim(), url: url.trim() };
-  });
+    const parts = line.split("|").map((part) => part.trim());
+    if (parts.length >= 4) {
+      const [folder, name, status = "Disponivel mediante liberacao", url = ""] = parts;
+      return { folder: folder || "Documentos", name, status, url };
+    }
+    const [name, status = "Disponivel mediante liberacao", url = ""] = parts;
+    return { folder: "Documentos", name, status, url };
+  }).filter((doc) => doc.name);
 }
 
-async function saveChildren(db, projectId, steps, docs) {
+function normalizePayments(payload) {
+  return parseLines(payload.payments_text, (line) => {
+    const paid = /^\[x\]/i.test(line);
+    const clean = line.replace(/^\[[ x]\]\s*/i, "");
+    const [title, amount = "", dueDate = "", status = paid ? "Pago" : "Previsto", notes = ""] = clean.split("|").map((part) => part.trim());
+    return { title, amount, due_date: dueDate, status, notes };
+  }).filter((payment) => payment.title);
+}
+
+async function saveChildren(db, projectId, steps, docs, payments) {
   await db.batch([
     db.prepare("DELETE FROM project_steps WHERE project_id = ?").bind(projectId),
-    db.prepare("DELETE FROM project_documents WHERE project_id = ?").bind(projectId)
+    db.prepare("DELETE FROM project_documents WHERE project_id = ?").bind(projectId),
+    db.prepare("DELETE FROM project_files WHERE project_id = ?").bind(projectId),
+    db.prepare("DELETE FROM project_payments WHERE project_id = ?").bind(projectId)
   ]);
 
   const statements = [];
@@ -61,6 +70,16 @@ async function saveChildren(db, projectId, steps, docs) {
     statements.push(
       db.prepare("INSERT INTO project_documents (id, project_id, name, status, url, sort_order) VALUES (?, ?, ?, ?, ?, ?)")
         .bind(makeId(), projectId, doc.name, doc.status, doc.url, index)
+    );
+    statements.push(
+      db.prepare("INSERT INTO project_files (id, project_id, folder, name, status, url, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        .bind(makeId(), projectId, doc.folder, doc.name, doc.status, doc.url, index)
+    );
+  });
+  payments.forEach((payment, index) => {
+    statements.push(
+      db.prepare("INSERT INTO project_payments (id, project_id, title, amount, due_date, status, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(makeId(), projectId, payment.title, payment.amount, payment.due_date, payment.status, payment.notes, index)
     );
   });
   if (statements.length) await db.batch(statements);
@@ -89,9 +108,9 @@ export async function onRequestPost({ env, request }) {
     const db = requireDb(env);
     const payload = await readJson(request);
     const accessCode = normalizeCode(payload.access_code);
-    if (!accessCode) return error("Código do projeto é obrigatório.", 400);
-    if (!payload.client_name) return error("Nome do cliente é obrigatório.", 400);
-    if (!payload.project_title) return error("Título do projeto é obrigatório.", 400);
+    if (!accessCode) return error("Codigo do projeto e obrigatorio.", 400);
+    if (!payload.client_name) return error("Nome do cliente e obrigatorio.", 400);
+    if (!payload.project_title) return error("Titulo do projeto e obrigatorio.", 400);
 
     const now = new Date().toISOString();
     const existing = await db.prepare("SELECT id FROM projects WHERE access_code = ?").bind(accessCode).first();
@@ -106,7 +125,7 @@ export async function onRequestPost({ env, request }) {
         payload.client_name,
         payload.project_title,
         payload.city || "",
-        payload.status || "Em análise técnica",
+        payload.status || "Em analise tecnica",
         payload.owner || "Valdivino - Metal Vida",
         payload.notes || "",
         now,
@@ -122,7 +141,7 @@ export async function onRequestPost({ env, request }) {
         payload.client_name,
         payload.project_title,
         payload.city || "",
-        payload.status || "Em análise técnica",
+        payload.status || "Em analise tecnica",
         payload.owner || "Valdivino - Metal Vida",
         payload.notes || "",
         now,
@@ -132,10 +151,11 @@ export async function onRequestPost({ env, request }) {
 
     const steps = normalizeSteps(payload);
     const docs = normalizeDocs(payload);
-    await saveChildren(db, projectId, steps.length ? steps : defaultSteps(), docs);
+    const payments = normalizePayments(payload);
+    await saveChildren(db, projectId, steps.length ? steps : defaultSteps(), docs, payments);
 
     return json({ ok: true, project: { id: projectId, access_code: accessCode } });
   } catch (err) {
-    return error(err.message || "Erro ao salvar projeto.", 500);
+    return error(err.message || "Erro ao salvar projeto. Confira se a migracao 0002 foi executada no D1.", 500);
   }
 }

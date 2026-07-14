@@ -138,6 +138,7 @@ function setupClientPortal() {
   const updated = document.getElementById("clientUpdated");
   const steps = document.getElementById("clientSteps");
   const docs = document.getElementById("clientDocs");
+  const payments = document.getElementById("clientPayments");
   const whatsapp = document.getElementById("clientWhatsappLink");
 
   form.addEventListener("submit", (e) => {
@@ -162,7 +163,8 @@ function setupClientPortal() {
         client_name: clientProjects[code].client,
         project_title: clientProjects[code].title,
         updated_at: clientProjects[code].updated,
-        documents: clientProjects[code].docs.map((doc) => ({ name: doc.name, status: doc.status, url: "" }))
+        documents: clientProjects[code].docs.map((doc) => ({ folder: "Documentos", name: doc.name, status: doc.status, url: "" })),
+        payments: []
       };
     }
 
@@ -184,12 +186,8 @@ function setupClientPortal() {
       </li>
     `).join("");
 
-    docs.innerHTML = (project.documents || project.docs || []).map((doc) => `
-      <article class="client-doc">
-        <strong>${escapeHtml(doc.name)}</strong>
-        ${safeUrl(doc.url) ? `<a href="${safeUrl(doc.url)}" target="_blank" rel="noopener">${escapeHtml(doc.status || "Abrir")}</a>` : `<span>${escapeHtml(doc.status || "")}</span>`}
-      </article>
-    `).join("");
+    docs.innerHTML = renderDocumentFolders(project.documents || project.docs || []);
+    if (payments) payments.innerHTML = renderPayments(project.payments || []);
 
     const msg = [
       "AREA DO CLIENTE - METAL VIDA",
@@ -207,6 +205,44 @@ function setupClientPortal() {
     empty.hidden = true;
     dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+}
+
+function renderDocumentFolders(documents) {
+  if (!documents.length) return "<p class=\"section-intro\">Nenhum documento liberado ainda.</p>";
+  const folders = documents.reduce((acc, doc) => {
+    const folder = doc.folder || "Documentos";
+    acc[folder] = acc[folder] || [];
+    acc[folder].push(doc);
+    return acc;
+  }, {});
+  return Object.entries(folders).map(([folder, files]) => `
+    <section class="client-folder">
+      <h4>${escapeHtml(folder)}</h4>
+      ${files.map((doc) => `
+        <article class="client-doc">
+          <strong>${escapeHtml(doc.name)}</strong>
+          ${safeUrl(doc.url) ? `<a href="${safeUrl(doc.url)}" target="_blank" rel="noopener">${escapeHtml(doc.status || "Abrir")}</a>` : `<span>${escapeHtml(doc.status || "")}</span>`}
+        </article>
+      `).join("")}
+    </section>
+  `).join("");
+}
+
+function renderPayments(payments) {
+  if (!payments.length) return "<p class=\"section-intro\">Nenhuma condicao de pagamento publicada ainda.</p>";
+  return payments.map((payment) => `
+    <article class="client-payment">
+      <div>
+        <strong>${escapeHtml(payment.title)}</strong>
+        <span>${escapeHtml(payment.notes || "")}</span>
+      </div>
+      <div>
+        <strong>${escapeHtml(payment.amount || "-")}</strong>
+        <span>${escapeHtml(payment.due_date || "")}</span>
+      </div>
+      <mark>${escapeHtml(payment.status || "Previsto")}</mark>
+    </article>
+  `).join("");
 }
 
 function escapeHtml(value) {

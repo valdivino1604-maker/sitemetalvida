@@ -9,6 +9,7 @@ Este site agora tem uma primeira versao de area do cliente com painel administra
 - `/api/admin/projects`: API protegida por token para salvar/listar projetos.
 - `/api/client/[codigo]`: API publica para consultar um projeto pelo codigo.
 - `migrations/0001_client_portal.sql`: estrutura do banco D1.
+- `migrations/0002_client_documents_payments.sql`: pastas, documentos e pagamentos.
 
 ## Configuracao obrigatoria no Cloudflare Pages
 
@@ -45,13 +46,25 @@ Cole e execute o conteudo do arquivo:
 
 `migrations/0001_client_portal.sql`
 
+Depois cole e execute tambem:
+
+`migrations/0002_client_documents_payments.sql`
+
 ## Como usar
 
 1. Acesse `https://www.metalvida.com.br/admin/`.
 2. Informe o token administrativo.
 3. Cadastre um projeto com um codigo, por exemplo `MV-001`.
-4. Entregue esse codigo ao cliente.
-5. O cliente acessa `https://www.metalvida.com.br/clientes/` e consulta o projeto.
+4. Em pastas/documentos, use uma linha por arquivo:
+
+`Projetos | Desenho preliminar | Em preparacao | https://link-do-arquivo`
+
+5. Em pagamentos, use uma linha por parcela:
+
+`[ ] Entrada | R$ 5.000,00 | 15/07/2026 | Previsto | Condicao combinada`
+
+6. Entregue esse codigo ao cliente.
+7. O cliente acessa `https://www.metalvida.com.br/clientes/` e consulta o projeto.
 
 ## Observacao
 

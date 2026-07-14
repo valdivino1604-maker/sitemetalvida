@@ -1052,6 +1052,21 @@ a {
   gap: 10px;
 }
 
+.client-folder {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 8px;
+  padding: 13px;
+  background: rgba(255, 255, 255, .03);
+}
+
+.client-folder h4 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+}
+
 .client-doc {
   display: flex;
   justify-content: space-between;
@@ -1065,6 +1080,43 @@ a {
 
 .client-doc span {
   color: #d5d5d5;
+}
+
+.client-payments-card {
+  margin-top: 18px;
+}
+
+.client-payments {
+  display: grid;
+  gap: 10px;
+}
+
+.client-payment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 255, 255, .04);
+}
+
+.client-payment div {
+  display: grid;
+  gap: 4px;
+}
+
+.client-payment span {
+  color: var(--muted);
+}
+
+.client-payment mark {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(210, 10, 10, .24);
+  color: #ffffff;
+  font-weight: 900;
 }
 
 .client-empty {
@@ -1553,6 +1605,11 @@ footer div {
   .client-dashboard-head {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .client-payment {
+    grid-template-columns: 1fr;
+    align-items: stretch;
   }
 
   .service-card.wide {
