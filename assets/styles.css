@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --black: #070707;
   --surface: #111111;
   --panel: #171717;
@@ -136,9 +136,9 @@ a {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 72% 22%, rgba(199, 154, 66, .18), transparent 30%),
-    linear-gradient(90deg, rgba(0, 0, 0, .9), rgba(0, 0, 0, .74)),
-    linear-gradient(135deg, #181818 0%, #070707 52%, #260303 100%);
+    radial-gradient(circle at 74% 20%, rgba(210, 10, 10, .18), transparent 34%),
+    linear-gradient(90deg, rgba(0, 0, 0, .93), rgba(0, 0, 0, .78) 48%, rgba(0, 0, 0, .52)),
+    url("catalogo/reservatorios-hero.webp") center / cover no-repeat;
 }
 
 .hero-content {
@@ -255,12 +255,12 @@ a {
 }
 
 .hero-card img {
-  width: 118px;
-  height: 118px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   display: block;
   margin: 0 0 16px;
-  background: #000000;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, .08), rgba(0, 0, 0, .16));
   border-radius: 8px;
 }
 
@@ -490,7 +490,7 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 330px;
+  min-height: 520px;
   padding: 24px;
   overflow: hidden;
 }
@@ -506,6 +506,27 @@ a {
 .service-card.wide {
   grid-column: span 3;
   min-height: 230px;
+}
+
+.product-media {
+  height: 245px;
+  margin: -24px -24px 22px;
+  background-color: #202020;
+  background-position: center;
+  background-size: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+
+.media-taca {
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .05), rgba(0, 0, 0, .35)), url("catalogo/reservatorio-taca.webp");
+}
+
+.media-tubular {
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .05), rgba(0, 0, 0, .35)), url("catalogo/reservatorio-tubular.webp");
+}
+
+.media-combustivel {
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .05), rgba(0, 0, 0, .35)), url("catalogo/tanque-combustivel.webp");
 }
 
 .service-number {
@@ -679,12 +700,9 @@ a {
   text-shadow: 0 2px 14px rgba(0, 0, 0, .72);
 }
 
-.p1 { background-image: url("https://images.unsplash.com/uploads/14123892966835548e7bd/14369636?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=1600"); }
-.p2 { background-image: url("https://images.unsplash.com/photo-1683617617932-54ad37ae8c02?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=1600"); }
-.p3 { background-image: url("https://images.unsplash.com/photo-1565610222536-ef125c59da2e?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=1600"); }
-.p4 { background-image: url("https://images.unsplash.com/photo-1724134969363-cbc50540a8d8?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=1600"); }
-.p5 { background-image: url("https://images.unsplash.com/photo-1599654451040-b1be44a849c0?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=1600"); }
-.p6 { background-image: url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=72&w=1600"); }
+.p1 { background-image: url("catalogo/reservatorio-taca.webp"); }
+.p2 { background-image: url("catalogo/reservatorio-tubular.webp"); }
+.p3 { background-image: url("catalogo/tanque-combustivel.webp"); }
 
 .portfolio-cta {
   text-align: center;
@@ -890,7 +908,7 @@ footer div {
   flex: 0 0 auto;
   border-radius: 50%;
   border: 2px solid #ffffff;
-  background: #111111 url("lobao-avatar.svg") center / cover no-repeat;
+  background: #111111 url("metalzinho-avatar.webp") center / cover no-repeat;
   box-shadow: 0 6px 14px rgba(0, 0, 0, .28);
   font-size: 0;
   overflow: hidden;
@@ -924,7 +942,7 @@ footer div {
   width: min(390px, calc(100vw - 32px));
   height: min(620px, calc(100vh - 124px));
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto 1fr auto auto auto;
   overflow: hidden;
   border-radius: 8px;
   background: #ffffff;
@@ -960,7 +978,7 @@ footer div {
   flex: 0 0 auto;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, .82);
-  background: #111111 url("lobao-avatar.svg") center / cover no-repeat;
+  background: #111111 url("metalzinho-avatar.webp") center / cover no-repeat;
   font-size: 0;
   font-weight: 1000;
 }
@@ -1064,6 +1082,22 @@ footer div {
   cursor: pointer;
   font-weight: 800;
   font-size: 12px;
+}
+
+.lobao-transfer {
+  padding: 0 12px 12px;
+  background: #ffffff;
+}
+
+.lobao-transfer button {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  background: #25d366;
+  color: #062b14;
+  cursor: pointer;
+  font-weight: 1000;
 }
 
 .lobao-form {
@@ -1251,5 +1285,26 @@ footer div {
 
   .mini-shop small {
     text-align: left;
+  }
+
+  #lobao-chat-root {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .lobao-launcher {
+    min-width: 154px;
+    height: 48px;
+    gap: 8px;
+    padding: 0 12px 0 9px;
+  }
+
+  .lobao-launcher-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .lobao-notice {
+    font-size: 12px;
   }
 }

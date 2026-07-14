@@ -1,4 +1,4 @@
-const contacts = {
+﻿const contacts = {
   valdivino: { name: "Valdivino - Metal Vida", phone: "5564981616434" },
   financeiro: { name: "Marliana - Financeiro Metal Vida", phone: "5564984180380" }
 };
@@ -28,7 +28,7 @@ function normalizeContactLabels() {
     const span = route.querySelector("span");
     const ghost = route.querySelector(".btn.ghost");
 
-    if (text.includes("mateus") || text.includes("paulo") || text.includes("comercial")) {
+    if (text.includes("comercial")) {
       strong?.replaceChildren(document.createTextNode("Comercial"));
       span?.replaceChildren(document.createTextNode("E-mail comercial"));
       if (ghost) ghost.textContent = "Enviar e-mail comercial";
@@ -57,7 +57,7 @@ function setLinks() {
     const item = el.getAttribute("data-buy");
     el.href = wa(
       contacts.valdivino.phone,
-      `Ola, vim pelo site da Metal Vida. Tenho interesse em: ${item}. Pode me passar valores, disponibilidade e prazo?`
+      `Ola, vim pelo site da Metal Vida. Tenho interesse em: ${item}. Pode me orientar sobre proposta tecnica, capacidade e prazo?`
     );
   });
 
@@ -65,7 +65,7 @@ function setLinks() {
     const item = el.getAttribute("data-service");
     el.href = wa(
       contacts.valdivino.phone,
-      `Ola, vim pelo site da Metal Vida. Quero solicitar orcamento tecnico para: ${item}. Pode me orientar?`
+      `Ola, vim pelo site da Metal Vida. Quero solicitar proposta tecnica para: ${item}. Pode me orientar?`
     );
   });
 }
@@ -134,10 +134,10 @@ function ensureMetalzinhoChat() {
         </header>
         <div class="lobao-messages" id="lobaoMessages"></div>
         <div class="lobao-quick">
-          <button type="button" data-chat-quick="Quero um orcamento tecnico">Orcamento</button>
-          <button type="button" data-chat-quick="Preciso de galpao ou cobertura metalica">Galpao/cobertura</button>
-          <button type="button" data-chat-quick="Preciso de reservatorio metalico">Reservatorio</button>
-          <button type="button" data-chat-quick="Quero falar com especialista">Especialista</button>
+          <button type="button" data-chat-quick="Quero orcamento de reservatorio">Orcamento</button>
+          <button type="button" data-chat-quick="Preciso de reservatorio tipo taca">Tipo taca</button>
+          <button type="button" data-chat-quick="Preciso de reservatorio tubular sem cone">Tubular</button>
+          <button type="button" data-chat-quick="Preciso de tanque para combustivel">Combustivel</button>
         </div>
         <div class="lobao-transfer">
           <button type="button" id="metalzinhoTransfer">Finalizar e falar no WhatsApp</button>
@@ -199,9 +199,9 @@ let lead = {};
 const leadFields = [
   { key: "nome", label: "Nome/empresa", question: "Para montar o pedido, qual e seu nome e o nome da empresa?" },
   { key: "telefone", label: "Telefone/WhatsApp", question: "Qual telefone ou WhatsApp para o comercial retornar?" },
-  { key: "cidade", label: "Cidade/UF", question: "Qual e a cidade e UF da obra, entrega ou retirada?" },
-  { key: "servico", label: "Servico/produto", question: "O que voce precisa? Exemplo: estrutura, galpao, reservatorio, chapas, escada, mezanino ou projeto sob medida." },
-  { key: "medidas", label: "Medidas/detalhes", question: "Passe as medidas, quantidade, espessura/capacidade e qualquer detalhe importante." },
+  { key: "cidade", label: "Cidade/UF", question: "Qual e a cidade e UF do local de instalacao?" },
+  { key: "servico", label: "Produto/modelo", question: "Qual produto voce precisa: tipo taca, tubular sem cone, tanque horizontal para combustivel ou ainda precisa de orientacao?" },
+  { key: "medidas", label: "Capacidade/detalhes", question: "Qual capacidade desejada, fluido armazenado e medidas aproximadas? Exemplo: 30.000 L de agua, 50.000 L de diesel, altura desejada." },
   { key: "prazo", label: "Prazo desejado", question: "Tem prazo desejado ou urgencia para atendimento?" }
 ];
 
@@ -286,7 +286,7 @@ function buildTransferSummary() {
 function startBudgetFlow(origin = "Atendimento pelo site") {
   lead = { origem: origin, startedAt: new Date().toISOString() };
   leadStep = 0;
-  addMessage("Vou montar um pedido de orcamento para enviar ao comercial da Metal Vida. Nao e valor final, mas ja deixa tudo organizado para responderem mais rapido.");
+  addMessage("Vou montar um pedido de proposta tecnica para reservatorio ou tanque Metal Vida. Nao e valor final, mas ja deixa capacidade, fluido, modelo e local organizados para responderem mais rapido.");
   addMessage(leadFields[leadStep].question);
 }
 
@@ -325,7 +325,7 @@ function openChat() {
   lobaoLauncher?.setAttribute("aria-expanded", "true");
   if (!chatStarted) {
     chatStarted = true;
-    addMessage("Fala! Eu sou o Metalzinho da Metal Vida. Posso montar um pedido de orcamento, salvar a conversa no navegador e enviar o resumo para o Valdivino pelo WhatsApp. O que voce precisa?");
+    addMessage("Fala! Eu sou o Metalzinho da Metal Vida. Posso montar um pedido de proposta para reservatorio tipo taca, tubular sem cone ou tanque para combustivel, salvar a conversa no navegador e enviar o resumo para o Valdivino pelo WhatsApp. O que voce precisa?");
   }
   setTimeout(() => lobaoInput?.focus(), 120);
 }
@@ -348,7 +348,7 @@ function reply(text) {
     handleBudgetAnswer(text);
     return;
   }
-  if (t.includes("chapa") || t.includes("compr")) {
+  if (t.includes("taca") || t.includes("taça") || t.includes("tubular") || t.includes("combustivel") || t.includes("combustível")) {
     startBudgetFlow(text);
     return;
   }
@@ -356,7 +356,7 @@ function reply(text) {
     startBudgetFlow(text);
     return;
   }
-  if (t.includes("galpao") || t.includes("cobertura") || t.includes("estrutura")) {
+  if (t.includes("agua") || t.includes("água") || t.includes("diesel") || t.includes("alcool") || t.includes("gasolina")) {
     startBudgetFlow(text);
     return;
   }
@@ -369,8 +369,8 @@ function reply(text) {
     startBudgetFlow(text);
     return;
   }
-  addMessage("Entendi. A Metal Vida atende estruturas metalicas, reservatorios, galpoes, coberturas, chapas, mezaninos, escadas e pecas sob medida. Se preferir, posso te encaminhar para o WhatsApp agora.");
-  addWhatsappAction("Continuar no WhatsApp", "Ola, vim pelo site da Metal Vida e preciso de atendimento.", contacts.valdivino.phone);
+  addMessage("Entendi. A Metal Vida atende reservatorio tipo taca, reservatorio tubular sem cone e tanque horizontal para combustivel sob projeto. Se preferir, posso te encaminhar para o WhatsApp agora.");
+  addWhatsappAction("Continuar no WhatsApp", "Ola, vim pelo site da Metal Vida e preciso de atendimento para reservatorio ou tanque metalico.", contacts.valdivino.phone);
 }
 
 lobaoLauncher?.addEventListener("click", () => {
