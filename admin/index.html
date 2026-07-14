@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin | Portal Metal Vida</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#080808" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260714-saas-1" />
+</head>
+<body class="client-page admin-page">
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="Metal Vida Engenharia">
+      <img class="brand-logo" src="../assets/logo-metalvida.png" alt="Metal Vida Engenharia" />
+      <span class="brand-text"><strong>Metal Vida</strong><small>Admin</small></span>
+    </a>
+    <nav class="nav" aria-label="Menu administrativo">
+      <a href="../clientes/">Área do cliente</a>
+      <a href="../">Site principal</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section admin-shell">
+      <div class="admin-head">
+        <div>
+          <p class="eyebrow">SaaS Metal Vida</p>
+          <h1>Painel de projetos dos clientes</h1>
+          <p class="section-intro">Cadastre clientes, gere códigos de acesso e atualize status, etapas e documentos do projeto.</p>
+        </div>
+        <button class="btn ghost" id="clearAdminToken" type="button">Trocar senha/token</button>
+      </div>
+
+      <div class="admin-grid">
+        <form class="admin-form client-login-card" id="adminProjectForm">
+          <h2>Novo / atualizar projeto</h2>
+          <label>Token administrativo
+            <input name="admin_token" id="adminToken" type="password" autocomplete="current-password" placeholder="Token configurado no Cloudflare" required />
+          </label>
+          <div class="admin-two">
+            <label>Código do projeto
+              <input name="access_code" required placeholder="MV-2026-001" />
+            </label>
+            <label>Status
+              <input name="status" placeholder="Proposta técnica em análise" />
+            </label>
+          </div>
+          <label>Cliente
+            <input name="client_name" required placeholder="Nome do cliente ou empresa" />
+          </label>
+          <label>Título do projeto
+            <input name="project_title" required placeholder="Reservatório tipo taça 15 m³" />
+          </label>
+          <div class="admin-two">
+            <label>Cidade/UF
+              <input name="city" placeholder="Rio Verde/GO" />
+            </label>
+            <label>Responsável
+              <input name="owner" placeholder="Valdivino - Metal Vida" />
+            </label>
+          </div>
+          <label>Observações internas
+            <textarea name="notes" rows="3" placeholder="Observações rápidas sobre o atendimento"></textarea>
+          </label>
+          <label>Etapas
+            <textarea name="steps_text" rows="6" placeholder="[x] Atendimento inicial | Dados recebidos&#10;[x] Levantamento técnico | Capacidade e local conferidos&#10;[ ] Proposta técnica | Em preparação"></textarea>
+          </label>
+          <label>Documentos
+            <textarea name="documents_text" rows="4" placeholder="Proposta técnica | Disponível mediante liberação | https://...&#10;Desenho preliminar | Em preparação |"></textarea>
+          </label>
+          <button class="btn primary full" type="submit">Salvar projeto</button>
+          <p class="admin-message" id="adminMessage"></p>
+        </form>
+
+        <section class="client-login-card admin-list">
+          <div class="admin-list-head">
+            <h2>Projetos cadastrados</h2>
+            <button class="btn ghost small" id="loadProjects" type="button">Atualizar lista</button>
+          </div>
+          <div id="projectsList" class="projects-list">
+            <p class="section-intro">Informe o token e clique em atualizar para ver os projetos cadastrados.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/script.js?v=20260714-saas-1"></script>
+</body>
+</html>

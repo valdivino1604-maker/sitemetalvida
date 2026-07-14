@@ -144,39 +144,59 @@ function setupClientPortal() {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
     const code = String(data.codigo || "").trim().toUpperCase();
-    const project = clientProjects[code];
+    loadClientProject(code, data.contato);
+  });
+
+  async function loadClientProject(code, contact) {
+    let project = null;
+    try {
+      const response = await fetch(`/api/client/${encodeURIComponent(code)}`);
+      const payload = await response.json();
+      if (payload.ok) project = payload.project;
+    } catch {}
+
+    if (!project && clientProjects[code]) {
+      project = {
+        ...clientProjects[code],
+        access_code: code,
+        client_name: clientProjects[code].client,
+        project_title: clientProjects[code].title,
+        updated_at: clientProjects[code].updated,
+        documents: clientProjects[code].docs.map((doc) => ({ name: doc.name, status: doc.status, url: "" }))
+      };
+    }
 
     if (!project) {
-      const msg = `Ola, preciso liberar acesso da area do cliente Metal Vida. Codigo informado: ${code || "nao informado"}. Contato: ${data.contato || "-"}`;
+      const msg = `Ola, preciso liberar acesso da area do cliente Metal Vida. Codigo informado: ${code || "nao informado"}. Contato: ${contact || "-"}`;
       window.open(wa(contacts.valdivino.phone, msg), "_blank");
       return;
     }
 
-    title.textContent = project.title;
-    meta.textContent = `${project.client} • ${project.city} • Codigo ${code}`;
+    title.textContent = project.project_title || project.title;
+    meta.textContent = `${project.client_name || project.client} • ${project.city || ""} • Codigo ${project.access_code || code}`;
     status.textContent = project.status;
     owner.textContent = project.owner;
-    updated.textContent = project.updated;
+    updated.textContent = project.updated_at || project.updated;
 
-    steps.innerHTML = project.steps.map((step) => `
+    steps.innerHTML = (project.steps || []).map((step) => `
       <li class="${step.done ? "done" : ""}">
-        <div><strong>${step.title}</strong><span>${step.text}</span></div>
+        <div><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.description || step.text || "")}</span></div>
       </li>
     `).join("");
 
-    docs.innerHTML = project.docs.map((doc) => `
+    docs.innerHTML = (project.documents || project.docs || []).map((doc) => `
       <article class="client-doc">
-        <strong>${doc.name}</strong>
-        <span>${doc.status}</span>
+        <strong>${escapeHtml(doc.name)}</strong>
+        ${safeUrl(doc.url) ? `<a href="${safeUrl(doc.url)}" target="_blank" rel="noopener">${escapeHtml(doc.status || "Abrir")}</a>` : `<span>${escapeHtml(doc.status || "")}</span>`}
       </article>
     `).join("");
 
     const msg = [
       "AREA DO CLIENTE - METAL VIDA",
       "",
-      `Codigo: ${code}`,
-      `Projeto: ${project.title}`,
-      `Cliente: ${project.client}`,
+      `Codigo: ${project.access_code || code}`,
+      `Projeto: ${project.project_title || project.title}`,
+      `Cliente: ${project.client_name || project.client}`,
       `Status: ${project.status}`,
       "",
       "Quero falar sobre este projeto."
@@ -186,6 +206,98 @@ function setupClientPortal() {
     dashboard.hidden = false;
     empty.hidden = true;
     dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function safeUrl(value) {
+  const url = String(value || "").trim();
+  return /^https?:\/\//i.test(url) ? url : "";
+}
+
+function setupAdminPortal() {
+  const form = document.getElementById("adminProjectForm");
+  if (!form) return;
+
+  const tokenInput = document.getElementById("adminToken");
+  const message = document.getElementById("adminMessage");
+  const list = document.getElementById("projectsList");
+  const loadButton = document.getElementById("loadProjects");
+  const clearButton = document.getElementById("clearAdminToken");
+
+  tokenInput.value = localStorage.getItem("metalvida_admin_token") || "";
+
+  function setMessage(text, type = "") {
+    message.textContent = text;
+    message.className = `admin-message ${type}`.trim();
+  }
+
+  function getToken() {
+    return tokenInput.value.trim();
+  }
+
+  async function adminFetch(url, options = {}) {
+    const token = getToken();
+    if (!token) throw new Error("Informe o token administrativo.");
+    localStorage.setItem("metalvida_admin_token", token);
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+        ...(options.headers || {})
+      }
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) throw new Error(payload.error || "Erro no painel administrativo.");
+    return payload;
+  }
+
+  async function loadProjects() {
+    try {
+      list.innerHTML = "<p class=\"section-intro\">Carregando projetos...</p>";
+      const payload = await adminFetch("/api/admin/projects");
+      list.innerHTML = payload.projects.length ? payload.projects.map((project) => `
+        <article class="project-row">
+          <strong>${escapeHtml(project.project_title)}</strong>
+          <span>${escapeHtml(project.client_name)} • ${escapeHtml(project.city || "Sem cidade")} • ${escapeHtml(project.status)}</span>
+          <span>Código: <code>${escapeHtml(project.access_code)}</code></span>
+        </article>
+      `).join("") : "<p class=\"section-intro\">Nenhum projeto cadastrado ainda.</p>";
+    } catch (err) {
+      list.innerHTML = `<p class="admin-message error">${err.message}</p>`;
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    try {
+      setMessage("Salvando projeto...");
+      const payload = await adminFetch("/api/admin/projects", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+      setMessage(`Projeto salvo. Código: ${payload.project.access_code}`, "ok");
+      await loadProjects();
+    } catch (err) {
+      setMessage(err.message, "error");
+    }
+  });
+
+  loadButton?.addEventListener("click", loadProjects);
+  clearButton?.addEventListener("click", () => {
+    localStorage.removeItem("metalvida_admin_token");
+    tokenInput.value = "";
+    setMessage("Token removido deste navegador.");
   });
 }
 
@@ -268,6 +380,7 @@ setLinks();
 setupMenu();
 setupQuoteForm();
 setupClientPortal();
+setupAdminPortal();
 
 const year = document.getElementById("year");
 if (year) year.textContent = new Date().getFullYear();
