@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Área do Cliente | Metal Vida Engenharia</title>
+  <meta name="description" content="Área do cliente Metal Vida para acompanhamento de propostas, projetos, documentos e etapas de reservatórios e tanques metálicos." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#080808" />
+  <link rel="canonical" href="https://www.metalvida.com.br/clientes/" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260714-clientes-1" />
+</head>
+<body class="client-page">
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="Metal Vida Engenharia">
+      <img class="brand-logo" src="../assets/logo-metalvida.png" alt="Metal Vida Engenharia" />
+      <span class="brand-text"><strong>Metal Vida</strong><small>Engenharia</small></span>
+    </a>
+    <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <nav class="nav" aria-label="Menu principal">
+      <a href="../#solucoes">Reservatórios</a>
+      <a href="../#portfolio">Aplicações</a>
+      <a href="../#orcamento">Orçamento</a>
+      <a href="./">Área do cliente</a>
+      <a href="../#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="client-hero">
+      <div>
+        <p class="eyebrow">Portal do cliente</p>
+        <h1>Acompanhe seu projeto Metal Vida</h1>
+        <p class="lead">Consulte status, próximos passos, documentos técnicos, proposta e arquivos vinculados ao seu reservatório, tanque ou solução metálica.</p>
+        <div class="hero-proof">
+          <span>Proposta técnica</span>
+          <span>Arquivos do projeto</span>
+          <span>Status da obra</span>
+        </div>
+      </div>
+      <aside class="client-login-card">
+        <img src="../assets/metalzinho-avatar.webp" alt="Metalzinho, assistente da área do cliente" />
+        <h2>Entrar na área do cliente</h2>
+        <p>Informe o código de acesso recebido pela equipe Metal Vida.</p>
+        <form id="clientPortalForm" class="client-login-form">
+          <label>Código do projeto
+            <input name="codigo" autocomplete="off" required placeholder="Ex.: MV-2026-001" />
+          </label>
+          <label>E-mail ou WhatsApp
+            <input name="contato" autocomplete="off" placeholder="Para conferência do atendimento" />
+          </label>
+          <button class="btn primary full" type="submit">Acessar projeto</button>
+        </form>
+        <button class="btn ghost full client-help" type="button" data-whatsapp="valdivino" data-message="Olá, preciso receber ou recuperar meu código de acesso da área do cliente Metal Vida.">Pedir código pelo WhatsApp</button>
+        <small>Exemplo para teste interno: MV-DEMO</small>
+      </aside>
+    </section>
+
+    <section class="section client-dashboard" id="clientDashboard" hidden>
+      <div class="client-dashboard-head">
+        <div>
+          <p class="eyebrow">Projeto localizado</p>
+          <h2 id="clientProjectTitle">Projeto Metal Vida</h2>
+          <p id="clientProjectMeta" class="section-intro"></p>
+        </div>
+        <a class="btn primary" id="clientWhatsappLink" href="#" target="_blank" rel="noopener">Falar sobre este projeto</a>
+      </div>
+
+      <div class="client-status-grid">
+        <article><strong>Status</strong><span id="clientStatus">Em análise técnica</span></article>
+        <article><strong>Responsável</strong><span id="clientOwner">Comercial Metal Vida</span></article>
+        <article><strong>Última atualização</strong><span id="clientUpdated">--</span></article>
+      </div>
+
+      <div class="client-columns">
+        <section class="client-card">
+          <h3>Etapas do projeto</h3>
+          <ol class="client-steps" id="clientSteps"></ol>
+        </section>
+        <section class="client-card">
+          <h3>Documentos disponíveis</h3>
+          <div class="client-docs" id="clientDocs"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section client-empty" id="clientEmpty">
+      <p class="eyebrow">Acesso reservado</p>
+      <h2>Tenha o código do projeto em mãos</h2>
+      <p class="section-intro">Se ainda não recebeu o código, solicite pelo WhatsApp. A equipe pode liberar o acesso conforme a proposta, etapa ou documentação disponível.</p>
+      <div class="actions center">
+        <a class="btn primary" data-whatsapp="valdivino" data-message="Olá, quero solicitar acesso à área do cliente Metal Vida para acompanhar meu projeto." href="#">Solicitar acesso</a>
+        <a class="btn ghost" href="../#orcamento">Solicitar proposta técnica</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>Metal Vida Engenharia</strong><span>Área do cliente para projetos, propostas e documentos técnicos.</span></div>
+    <p>© <span id="year"></span> Metal Vida Engenharia. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="../assets/script.js?v=20260714-clientes-1"></script>
+</body>
+</html>

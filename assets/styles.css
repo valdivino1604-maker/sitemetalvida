@@ -848,6 +848,229 @@ a {
   font-size: 14px;
 }
 
+.client-access {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, .75fr);
+  gap: 34px;
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(210, 10, 10, .12), transparent 38%),
+    #101010;
+}
+
+.client-access-copy {
+  max-width: 720px;
+}
+
+.client-access-panel {
+  display: grid;
+  gap: 12px;
+  background: linear-gradient(180deg, #191919, #0c0c0c);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.client-access-panel span {
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-left: 4px solid var(--red);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #f4f4f4;
+  font-weight: 900;
+  background: rgba(255, 255, 255, .04);
+}
+
+.client-page {
+  background:
+    radial-gradient(circle at 70% 0%, rgba(210, 10, 10, .14), transparent 34%),
+    linear-gradient(180deg, #080808, #111111 44%, #070707);
+}
+
+.client-hero {
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  gap: 42px;
+  align-items: center;
+  padding: 76px max(20px, calc((100vw - var(--max)) / 2));
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .92), rgba(0, 0, 0, .72)),
+    url("catalogo/reservatorios-hero.webp") center / cover no-repeat;
+}
+
+.client-hero h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.02;
+  margin: 0 0 20px;
+}
+
+.client-login-card,
+.client-card,
+.client-status-grid article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(20, 20, 20, .94);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, .35);
+}
+
+.client-login-card {
+  padding: 24px;
+}
+
+.client-login-card img {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .18);
+  background: #080808;
+}
+
+.client-login-card h2 {
+  margin: 14px 0 6px;
+}
+
+.client-login-card p,
+.client-login-card small {
+  color: var(--muted);
+}
+
+.client-login-form {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 12px;
+}
+
+.client-login-form label {
+  color: #f2f2f2;
+  font-weight: 900;
+}
+
+.client-login-form input {
+  width: 100%;
+  margin-top: 7px;
+  min-height: 48px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  background: #090909;
+  color: #ffffff;
+  padding: 0 13px;
+  font-size: 16px;
+}
+
+.client-help {
+  margin-bottom: 10px;
+}
+
+.client-dashboard-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.client-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.client-status-grid article {
+  padding: 18px;
+}
+
+.client-status-grid strong {
+  display: block;
+  color: #ff4a4a;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.client-status-grid span {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.client-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.client-card {
+  padding: 22px;
+}
+
+.client-card h3 {
+  margin-top: 0;
+}
+
+.client-steps {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.client-steps li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  align-items: start;
+  color: #d8d8d8;
+}
+
+.client-steps li::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: #404040;
+  border: 2px solid #777777;
+}
+
+.client-steps li.done::before {
+  background: var(--red);
+  border-color: #ff5555;
+  box-shadow: 0 0 0 4px rgba(210, 10, 10, .16);
+}
+
+.client-steps strong {
+  display: block;
+  color: #ffffff;
+}
+
+.client-docs {
+  display: grid;
+  gap: 10px;
+}
+
+.client-doc {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 8px;
+  padding: 13px;
+  background: rgba(255, 255, 255, .04);
+}
+
+.client-doc span {
+  color: #d5d5d5;
+}
+
+.client-empty {
+  text-align: center;
+}
+
 footer {
   border-top: 1px solid var(--line);
   padding: 28px max(20px, calc((100vw - var(--max)) / 2));
@@ -1205,8 +1428,17 @@ footer div {
   .service-grid,
   .split-band,
   .segment-grid,
-  .process {
+  .process,
+  .client-access,
+  .client-hero,
+  .client-status-grid,
+  .client-columns {
     grid-template-columns: 1fr;
+  }
+
+  .client-dashboard-head {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .service-card.wide {

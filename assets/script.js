@@ -102,6 +102,93 @@ function setupQuoteForm() {
   });
 }
 
+const clientProjects = {
+  "MV-DEMO": {
+    title: "Reservatório tubular sem cone - Demonstração",
+    client: "Cliente demonstração",
+    city: "Rio Verde/GO",
+    status: "Proposta técnica em validação",
+    owner: "Valdivino - Metal Vida",
+    updated: "14/07/2026",
+    steps: [
+      { title: "Atendimento inicial", text: "Dados do cliente e aplicação recebidos.", done: true },
+      { title: "Levantamento técnico", text: "Capacidade, fluido, local e prazo em análise.", done: true },
+      { title: "Proposta técnica", text: "Condições e escopo em validação com o cliente.", done: true },
+      { title: "Projeto / fabricação", text: "Liberado após aprovação comercial e técnica.", done: false },
+      { title: "Entrega / montagem", text: "Programação definida após fabricação.", done: false }
+    ],
+    docs: [
+      { name: "Proposta técnica", status: "Disponível mediante liberação" },
+      { name: "Desenho preliminar", status: "Em preparação" },
+      { name: "Memorial / observações", status: "Aguardando validação" }
+    ]
+  }
+};
+
+function setupClientPortal() {
+  const form = document.getElementById("clientPortalForm");
+  if (!form) return;
+
+  const dashboard = document.getElementById("clientDashboard");
+  const empty = document.getElementById("clientEmpty");
+  const title = document.getElementById("clientProjectTitle");
+  const meta = document.getElementById("clientProjectMeta");
+  const status = document.getElementById("clientStatus");
+  const owner = document.getElementById("clientOwner");
+  const updated = document.getElementById("clientUpdated");
+  const steps = document.getElementById("clientSteps");
+  const docs = document.getElementById("clientDocs");
+  const whatsapp = document.getElementById("clientWhatsappLink");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    const code = String(data.codigo || "").trim().toUpperCase();
+    const project = clientProjects[code];
+
+    if (!project) {
+      const msg = `Ola, preciso liberar acesso da area do cliente Metal Vida. Codigo informado: ${code || "nao informado"}. Contato: ${data.contato || "-"}`;
+      window.open(wa(contacts.valdivino.phone, msg), "_blank");
+      return;
+    }
+
+    title.textContent = project.title;
+    meta.textContent = `${project.client} • ${project.city} • Codigo ${code}`;
+    status.textContent = project.status;
+    owner.textContent = project.owner;
+    updated.textContent = project.updated;
+
+    steps.innerHTML = project.steps.map((step) => `
+      <li class="${step.done ? "done" : ""}">
+        <div><strong>${step.title}</strong><span>${step.text}</span></div>
+      </li>
+    `).join("");
+
+    docs.innerHTML = project.docs.map((doc) => `
+      <article class="client-doc">
+        <strong>${doc.name}</strong>
+        <span>${doc.status}</span>
+      </article>
+    `).join("");
+
+    const msg = [
+      "AREA DO CLIENTE - METAL VIDA",
+      "",
+      `Codigo: ${code}`,
+      `Projeto: ${project.title}`,
+      `Cliente: ${project.client}`,
+      `Status: ${project.status}`,
+      "",
+      "Quero falar sobre este projeto."
+    ].join("\n");
+    whatsapp.href = wa(contacts.valdivino.phone, msg);
+
+    dashboard.hidden = false;
+    empty.hidden = true;
+    dashboard.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
 function injectMetalzinhoStyles() {
   if (document.getElementById("metalzinho-chat-styles")) return;
   const style = document.createElement("style");
@@ -180,6 +267,7 @@ normalizeContactLabels();
 setLinks();
 setupMenu();
 setupQuoteForm();
+setupClientPortal();
 
 const year = document.getElementById("year");
 if (year) year.textContent = new Date().getFullYear();
