@@ -1,14 +1,48 @@
 const contacts = {
   valdivino: { name: "Valdivino - Metal Vida", phone: "5564981616434" },
-  financeiro: { name: "Valdivino - Metal Vida", phone: "5564981616434" },
-  paulo: { name: "Valdivino - Metal Vida", phone: "5564981616434" },
-  mateus: { name: "Valdivino - Metal Vida", phone: "5564981616434" }
+  financeiro: { name: "Marliana - Financeiro Metal Vida", phone: "5564984180380" }
 };
 
 const assistantName = "Metalzinho";
 
 function wa(phone, msg) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+}
+
+function normalizeContactLabels() {
+  const financeCard = Array.from(document.querySelectorAll(".contact-card")).find((card) =>
+    card.textContent.toLowerCase().includes("financeiro")
+  );
+  if (financeCard) {
+    financeCard.setAttribute("data-whatsapp", "financeiro");
+    financeCard.setAttribute("data-message", "Ola, vim pelo site da Metal Vida e preciso falar com o financeiro.");
+    financeCard.setAttribute("href", "#");
+    financeCard.querySelector("strong")?.replaceChildren(document.createTextNode("Financeiro"));
+    financeCard.querySelector("span")?.replaceChildren(document.createTextNode("Assuntos administrativos e pagamentos"));
+    financeCard.querySelector("small")?.replaceChildren(document.createTextNode("WhatsApp: +55 64 98418-0380"));
+  }
+
+  document.querySelectorAll(".email-route").forEach((route) => {
+    const text = route.textContent.toLowerCase();
+    const strong = route.querySelector("strong");
+    const span = route.querySelector("span");
+    const ghost = route.querySelector(".btn.ghost");
+
+    if (text.includes("mateus") || text.includes("paulo") || text.includes("comercial")) {
+      strong?.replaceChildren(document.createTextNode("Comercial"));
+      span?.replaceChildren(document.createTextNode("E-mail comercial"));
+      if (ghost) ghost.textContent = "Enviar e-mail comercial";
+    }
+
+    if (text.includes("financeiro")) {
+      if (ghost) {
+        ghost.setAttribute("data-whatsapp", "financeiro");
+        ghost.setAttribute("data-message", "Ola, preciso falar com o financeiro da Metal Vida.");
+        ghost.setAttribute("href", "#");
+        ghost.textContent = "WhatsApp financeiro";
+      }
+    }
+  });
 }
 
 function setLinks() {
@@ -142,6 +176,7 @@ function ensureMetalzinhoChat() {
 }
 
 ensureMetalzinhoChat();
+normalizeContactLabels();
 setLinks();
 setupMenu();
 setupQuoteForm();
