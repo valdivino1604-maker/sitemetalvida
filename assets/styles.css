@@ -339,6 +339,10 @@ a {
   font-weight: 900;
 }
 
+.trust-bar-plus article {
+  min-height: 118px;
+}
+
 .section {
   max-width: var(--max);
   margin: auto;
@@ -561,6 +565,97 @@ a {
 
 .service-card .btn {
   margin-top: auto;
+}
+
+.capacity-section {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.capacity-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+  gap: 34px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+
+.capacity-grid,
+.model-compare,
+.logistics-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.capacity-grid {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 18px;
+}
+
+.capacity-grid article,
+.model-compare article,
+.logistics-grid article {
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02)),
+    #111111;
+  padding: 20px;
+}
+
+.capacity-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.capacity-grid span,
+.logistics-grid span {
+  color: #cfd3d8;
+  line-height: 1.45;
+}
+
+.model-compare {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.model-compare h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.model-compare h3::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 10px;
+  background: var(--red);
+}
+
+.model-compare p {
+  color: #d9d9d9;
+  margin: 0;
+}
+
+.logistics-section {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(210, 10, 10, .16), transparent 30%),
+    #090909;
+}
+
+.logistics-grid {
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 28px;
+}
+
+.logistics-grid strong {
+  display: block;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-size: 19px;
 }
 
 .split-band {
@@ -1529,6 +1624,11 @@ footer div {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .capacity-grid,
+  .logistics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .service-card.wide {
     grid-column: span 2;
   }
@@ -1588,6 +1688,10 @@ footer div {
   .split-band,
   .segment-grid,
   .process,
+  .capacity-head,
+  .capacity-grid,
+  .model-compare,
+  .logistics-grid,
   .client-access,
   .client-hero,
   .client-status-grid,
